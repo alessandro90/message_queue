@@ -4,7 +4,7 @@
 #include <chrono>
 #include <functional>
 #include <array>
-#include "messageQueue.hpp"
+#include "../messageQueue.hpp"
 
 
 using system_clock = std::chrono::system_clock;
@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& os, Action const& action) {
     return os;
 }
 
-class ListenerOne: public mq::Listener<Action> {
+class ListenerOne: public mq::Receiver<Action> {
     std::array<Action, 3> actions {
         Action::ACTION_1,
         Action::ACTION_2,
@@ -42,7 +42,7 @@ class ListenerOne: public mq::Listener<Action> {
     }
 };
 
-class ListenerTwo: public mq::Listener<Action> {
+class ListenerTwo: public mq::Receiver<Action> {
     std::array<Action, 4> actions {
         Action::ACTION_4,
         Action::ACTION_5,
@@ -60,10 +60,10 @@ class ListenerTwo: public mq::Listener<Action> {
 
 class ListenerTaskOne {
     std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{2, 4};
+    std::uniform_int_distribution<> dis{6, 10};
 
     void process(Action const& message) {
-        std::cout << "ListenerOne consume action: ";
+        std::cout << "ListenerTaskOne received ";
         switch (message) {
         case Action::ACTION_1:
             std::cout << "ACTION_1\n";
@@ -75,18 +75,18 @@ class ListenerTaskOne {
             std::cout << "ACTION_3\n";
             break;
         default:
-            std::cout << "None\n";
+            std::cout << "an unhandled message.\n";
             break;
         }
     }
 
 public:
-    ListenerOne listener{};
+    ListenerOne receiver{};
     void operator()() {
         while (true) {
             Action message{Action::ACTION_NONE};
             try {
-                message = listener.listen();
+                message = receiver.listen();
             } catch (mq::BaseMessageQueueException const& e) {
                 std::cout << e.what() << "\n";
             }
@@ -99,10 +99,10 @@ public:
 
 class ListenerTaskTwo {
     std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{1, 6};
+    std::uniform_int_distribution<> dis{3, 8};
 
     void process(Action const& message) {
-        std::cout << "ListenerTwo consume action: ";
+        std::cout << "ListenerTaskTwo received ";
         switch (message) {
         case Action::ACTION_4:
             std::cout << "ACTION_4\n";
@@ -117,18 +117,18 @@ class ListenerTaskTwo {
             std::cout << "ACTION_7\n";
             break;
         default:
-            std::cout << "None\n";
+            std::cout << "an unhandled message.\n";
             break;
         }
     }
 
 public:
-    ListenerTwo listener{};
+    ListenerTwo receiver{};
     void operator()() {
         while (true) {
             Action message{Action::ACTION_NONE};
             try{
-                message = listener.listen();
+                message = receiver.listen();
             } catch (mq::BaseMessageQueueException const& e) {}
             process(message);
             // Simulate some time-consuming task.
@@ -149,7 +149,7 @@ class ProducerTask {
         Action::ACTION_7,
     };
     std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{10, 20};
+    std::uniform_int_distribution<> dis{1, 3};
     std::uniform_int_distribution<> enum_dis{
         0, static_cast<int>(actions.size()) - 1
     };
@@ -159,22 +159,21 @@ public:
     mq::Producer<Action> producer{};
     void operator()() {
         while (true) {
-            std::cout << "ProducerTask Produce\n";
             producer.send(actions[enum_dis(gen)]);
+            std::cout << "Producer task queue size: " << producer.queue_size() << "\n";
             std::this_thread::sleep_for(duration(dis(gen)));
         }
     }
 };
 
 int main() {
-
     ProducerTask producer_task{};
     ListenerTaskOne listener_task{};
     ListenerTaskTwo listener_task_two{};
-    producer_task.producer.attach(listener_task.listener);
-    producer_task.producer.attach(listener_task_two.listener);
+    producer_task.producer.attach(listener_task.receiver);
+    producer_task.producer.attach(listener_task_two.receiver);
     producer_task.producer.set_max_len(10);
-    listener_task.listener.set_blocking(true, 30);
+    listener_task.receiver.set_blocking(true, 30);
 
     // The arguments of the std:thread ctor are moved or copied by value.
     std::thread producer_thread{std::ref(producer_task)};
