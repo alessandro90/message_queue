@@ -1,8 +1,8 @@
-# C++17 Template MEssage Queue
+# C++17 Template Message Queue
 
 This is a simple `C++17 ` header file which implements a message queue. All the classes are templates, so that a message can be basically any copyable type.
 
-Documentation can be read at <a href="./docs/html/index.html">docs/html/index.html</a>.
+Documentation can be read at <a href="http://htmlpreview.github.com/?docs/html/index.html">docs/html/index.html</a>.
 
 In the `example` folder there is a basic example of usage. The library is aimed at allowing the comunication between tasks in different threads.
 
