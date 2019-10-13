@@ -66,16 +66,16 @@ class ListenerTaskOne {
         std::cout << "ListenerTaskOne received ";
         switch (message) {
         case Action::ACTION_1:
-            std::cout << "ACTION_1\n";
+            std::cout << "ACTION_1\n" << std::flush;
             break;
         case Action::ACTION_2:
-            std::cout << "ACTION_2\n";
+            std::cout << "ACTION_2\n" << std::flush;
             break;
         case Action::ACTION_3:
-            std::cout << "ACTION_3\n";
+            std::cout << "ACTION_3\n" << std::flush;
             break;
         default:
-            std::cout << "an unhandled message.\n";
+            std::cout << "an unhandled message.\n" << std::flush;
             break;
         }
     }
@@ -88,7 +88,7 @@ public:
             try {
                 message = receiver.listen();
             } catch (mq::BaseMessageQueueException const& e) {
-                std::cout << e.what() << "\n";
+                std::cout << e.what() << "\n" << std::flush;
             }
             process(message);
             // Simulate some time-consuming task.
@@ -105,19 +105,19 @@ class ListenerTaskTwo {
         std::cout << "ListenerTaskTwo received ";
         switch (message) {
         case Action::ACTION_4:
-            std::cout << "ACTION_4\n";
+            std::cout << "ACTION_4\n" << std::flush;
             break;
         case Action::ACTION_5:
-            std::cout << "ACTION_4\n";
+            std::cout << "ACTION_4\n" << std::flush;
             break;
         case Action::ACTION_6:
-            std::cout << "ACTION_6\n";
+            std::cout << "ACTION_6\n" << std::flush;
             break;
         case Action::ACTION_7:
-            std::cout << "ACTION_7\n";
+            std::cout << "ACTION_7\n" << std::flush;
             break;
         default:
-            std::cout << "an unhandled message.\n";
+            std::cout << "an unhandled message.\n" << std::flush;
             break;
         }
     }
@@ -160,7 +160,7 @@ public:
     void operator()() {
         while (true) {
             producer.send(actions[enum_dis(gen)]);
-            std::cout << "Producer task queue size: " << producer.queue_size() << "\n";
+            std::cout << "Producer task queue size: " << producer.queue_size() << "\n" << std::flush;
             std::this_thread::sleep_for(duration(dis(gen)));
         }
     }

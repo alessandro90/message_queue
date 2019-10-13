@@ -13,11 +13,17 @@
 #include <mutex>
 #include <chrono>
 #include <exception>
+#include <type_traits>
+#include <thread>
 
 
 namespace mq {
 
-    template<typename MessageType> class Producer;
+    template<typename T, typename U = int>
+    using enable_if_copy_constructible = typename std::enable_if_t<std::is_copy_constructible_v<T>, U>;
+
+
+    template<typename MessageType, enable_if_copy_constructible<MessageType> = 0> class Producer;
 
     /** \brief Enum class describing if the queue is a FIFO or a LIFO. */
     enum class Mode {
@@ -75,7 +81,7 @@ namespace mq {
      * Can listen for an arbitrary (copyable) MessageType. It holds a pointer to a
      * message queue object belonging to a Producer object.
      */
-    template<typename MessageType>
+    template<typename MessageType, enable_if_copy_constructible<MessageType> = 0>
     class Receiver {
 
     public:
@@ -243,7 +249,7 @@ namespace mq {
      * 
      * Instances of this class cannot be copy-constructed or copy-assigned, but can be moved.
      * Any number of listeners can be attached to a single instance. */
-    template<typename MessageType>
+    template<typename MessageType, enable_if_copy_constructible<MessageType>>
     class Producer {
 
     public:

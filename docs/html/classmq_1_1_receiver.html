@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.16"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>C++17 Template Message Queue: mq::Receiver&lt; MessageType &gt; Class Template Reference</title>
+<title>C++17 Template Message Queue: mq::Receiver&lt; MessageType, &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() {
 <a href="#friends">Friends</a> &#124;
 <a href="classmq_1_1_receiver-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">mq::Receiver&lt; MessageType &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">mq::Receiver&lt; MessageType, &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -82,39 +82,39 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7fd6f8c7b063f00d661a5eacae40100"><td class="memItemLeft" align="right" valign="top">MessageType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ab7fd6f8c7b063f00d661a5eacae40100">listen</a> ()</td></tr>
-<tr class="memdesc:ab7fd6f8c7b063f00d661a5eacae40100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an object of type MessageType.  <a href="classmq_1_1_receiver.html#ab7fd6f8c7b063f00d661a5eacae40100">More...</a><br /></td></tr>
-<tr class="separator:ab7fd6f8c7b063f00d661a5eacae40100"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3e163ab86095a9a0adc001ba4d60c0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ac3e163ab86095a9a0adc001ba4d60c0c">set_blocking</a> (bool is_blocking, long int timeout=120, float wait_time=0.5) noexcept</td></tr>
-<tr class="memdesc:ac3e163ab86095a9a0adc001ba4d60c0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <code><a class="el" href="classmq_1_1_receiver.html#ab7fd6f8c7b063f00d661a5eacae40100" title="Return an object of type MessageType.">Receiver::listen</a></code> method to a blocking or non-blocking mode.  <a href="classmq_1_1_receiver.html#ac3e163ab86095a9a0adc001ba4d60c0c">More...</a><br /></td></tr>
-<tr class="separator:ac3e163ab86095a9a0adc001ba4d60c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b8fe724790edeb9e03eb4428d673dd1"><td class="memItemLeft" align="right" valign="top"><a id="a9b8fe724790edeb9e03eb4428d673dd1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a9b8fe724790edeb9e03eb4428d673dd1">set_mode</a> (<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> const &amp;queue_mode) noexcept</td></tr>
-<tr class="memdesc:a9b8fe724790edeb9e03eb4428d673dd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the queue mode (FIFO or LIFO) <br /></td></tr>
-<tr class="separator:a9b8fe724790edeb9e03eb4428d673dd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99e5c94180544f9fa705af3de41b81ce"><td class="memItemLeft" align="right" valign="top"><a id="a99e5c94180544f9fa705af3de41b81ce"></a>
-<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a99e5c94180544f9fa705af3de41b81ce">mode</a> ()</td></tr>
-<tr class="memdesc:a99e5c94180544f9fa705af3de41b81ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue mode. <br /></td></tr>
-<tr class="separator:a99e5c94180544f9fa705af3de41b81ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89d8f17dda8b9decfd01299ddde6b36b"><td class="memItemLeft" align="right" valign="top"><a id="a89d8f17dda8b9decfd01299ddde6b36b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a89d8f17dda8b9decfd01299ddde6b36b">blocking</a> ()</td></tr>
-<tr class="memdesc:a89d8f17dda8b9decfd01299ddde6b36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <code>true</code> if the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> has a blocking <code>listen</code> method. <br /></td></tr>
-<tr class="separator:a89d8f17dda8b9decfd01299ddde6b36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0e07ff842a48f093c7eef17e614eabd"><td class="memItemLeft" align="right" valign="top"><a id="ab0e07ff842a48f093c7eef17e614eabd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ab0e07ff842a48f093c7eef17e614eabd">detach</a> ()</td></tr>
-<tr class="memdesc:ab0e07ff842a48f093c7eef17e614eabd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> from the <a class="el" href="classmq_1_1_producer.html" title="The producer class is used to send messages to various receivers objects.">Producer</a>. <br /></td></tr>
-<tr class="separator:ab0e07ff842a48f093c7eef17e614eabd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46f93f11e4a6bb44b3446a21ff8ed8db"><td class="memItemLeft" align="right" valign="top"><a id="a46f93f11e4a6bb44b3446a21ff8ed8db"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a46f93f11e4a6bb44b3446a21ff8ed8db">detached</a> ()</td></tr>
-<tr class="memdesc:a46f93f11e4a6bb44b3446a21ff8ed8db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> is in a detached state. <br /></td></tr>
-<tr class="separator:a46f93f11e4a6bb44b3446a21ff8ed8db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae44ef06bae6b5cdf67b6daebfd4569d1"><td class="memItemLeft" align="right" valign="top">MessageType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1">listen</a> ()</td></tr>
+<tr class="memdesc:ae44ef06bae6b5cdf67b6daebfd4569d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an object of type MessageType.  <a href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1">More...</a><br /></td></tr>
+<tr class="separator:ae44ef06bae6b5cdf67b6daebfd4569d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08b1c5e10870878ee4739e8ebe120d22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">set_blocking</a> (bool is_blocking, long int timeout=120, float wait_time=0.5) noexcept</td></tr>
+<tr class="memdesc:a08b1c5e10870878ee4739e8ebe120d22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <code><a class="el" href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1" title="Return an object of type MessageType.">Receiver::listen</a></code> method to a blocking or non-blocking mode.  <a href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">More...</a><br /></td></tr>
+<tr class="separator:a08b1c5e10870878ee4739e8ebe120d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed41141a3ee7b90e364bf78775706cca"><td class="memItemLeft" align="right" valign="top"><a id="aed41141a3ee7b90e364bf78775706cca"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">set_mode</a> (<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> const &amp;queue_mode) noexcept</td></tr>
+<tr class="memdesc:aed41141a3ee7b90e364bf78775706cca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the queue mode (FIFO or LIFO) <br /></td></tr>
+<tr class="separator:aed41141a3ee7b90e364bf78775706cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac99b6c556439b656cc194da6ed831c77"><td class="memItemLeft" align="right" valign="top"><a id="ac99b6c556439b656cc194da6ed831c77"></a>
+<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ac99b6c556439b656cc194da6ed831c77">mode</a> ()</td></tr>
+<tr class="memdesc:ac99b6c556439b656cc194da6ed831c77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue mode. <br /></td></tr>
+<tr class="separator:ac99b6c556439b656cc194da6ed831c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0553545e313f8bf65b2a16138b1468d"><td class="memItemLeft" align="right" valign="top"><a id="ad0553545e313f8bf65b2a16138b1468d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ad0553545e313f8bf65b2a16138b1468d">blocking</a> ()</td></tr>
+<tr class="memdesc:ad0553545e313f8bf65b2a16138b1468d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <code>true</code> if the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> has a blocking <code>listen</code> method. <br /></td></tr>
+<tr class="separator:ad0553545e313f8bf65b2a16138b1468d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0233d7de119da26417700f8cbd479f7c"><td class="memItemLeft" align="right" valign="top"><a id="a0233d7de119da26417700f8cbd479f7c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a0233d7de119da26417700f8cbd479f7c">detach</a> ()</td></tr>
+<tr class="memdesc:a0233d7de119da26417700f8cbd479f7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> from the <a class="el" href="classmq_1_1_producer.html" title="The producer class is used to send messages to various receivers objects.">Producer</a>. <br /></td></tr>
+<tr class="separator:a0233d7de119da26417700f8cbd479f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3e1b143f8707622f7517f2bf1f7ed30"><td class="memItemLeft" align="right" valign="top"><a id="ad3e1b143f8707622f7517f2bf1f7ed30"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ad3e1b143f8707622f7517f2bf1f7ed30">detached</a> ()</td></tr>
+<tr class="memdesc:ad3e1b143f8707622f7517f2bf1f7ed30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> is in a detached state. <br /></td></tr>
+<tr class="separator:ad3e1b143f8707622f7517f2bf1f7ed30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ace5bcb00fad78dd24cb2c6ec607ca9da"><td class="memItemLeft" align="right" valign="top"><a id="ace5bcb00fad78dd24cb2c6ec607ca9da"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#ace5bcb00fad78dd24cb2c6ec607ca9da">consumed</a> (MessageType const &amp;message) const noexcept=0</td></tr>
-<tr class="memdesc:ace5bcb00fad78dd24cb2c6ec607ca9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure virtual function which is used to test if a message can be removed from the message queue. <br /></td></tr>
-<tr class="separator:ace5bcb00fad78dd24cb2c6ec607ca9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b4e00578c56146388c1095caba810a1"><td class="memItemLeft" align="right" valign="top"><a id="a9b4e00578c56146388c1095caba810a1"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a> (MessageType const &amp;message) const noexcept=0</td></tr>
+<tr class="memdesc:a9b4e00578c56146388c1095caba810a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure virtual function which is used to test if a message can be removed from the message queue. <br /></td></tr>
+<tr class="separator:a9b4e00578c56146388c1095caba810a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -123,25 +123,25 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Producer&lt; Message
 <tr class="separator:a7efd7c01ac718468182cbfc372866b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename MessageType&gt;<br />
-class mq::Receiver&lt; MessageType &gt;</h3>
+<div class="textblock"><h3>template&lt;typename MessageType, enable_if_copy_constructible&lt; MessageType &gt; = 0&gt;<br />
+class mq::Receiver&lt; MessageType, &gt;</h3>
 
 <p>Abstract base class template. </p>
 <p>Can listen for an arbitrary (copyable) MessageType. It holds a pointer to a message queue object belonging to a <a class="el" href="classmq_1_1_producer.html" title="The producer class is used to send messages to various receivers objects.">Producer</a> object. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab7fd6f8c7b063f00d661a5eacae40100"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7fd6f8c7b063f00d661a5eacae40100">&#9670;&nbsp;</a></span>listen()</h2>
+<a id="ae44ef06bae6b5cdf67b6daebfd4569d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae44ef06bae6b5cdf67b6daebfd4569d1">&#9670;&nbsp;</a></span>listen()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename MessageType&gt; </div>
+template&lt;typename MessageType, enable_if_copy_constructible&lt; MessageType &gt;  = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MessageType <a class="el" href="classmq_1_1_receiver.html">mq::Receiver</a>&lt; MessageType &gt;::listen </td>
+          <td class="memname">MessageType <a class="el" href="classmq_1_1_receiver.html">mq::Receiver</a>&lt; MessageType, &gt;::listen </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -159,19 +159,19 @@ template&lt;typename MessageType&gt; </div>
 
 </div>
 </div>
-<a id="ac3e163ab86095a9a0adc001ba4d60c0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3e163ab86095a9a0adc001ba4d60c0c">&#9670;&nbsp;</a></span>set_blocking()</h2>
+<a id="a08b1c5e10870878ee4739e8ebe120d22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08b1c5e10870878ee4739e8ebe120d22">&#9670;&nbsp;</a></span>set_blocking()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename MessageType&gt; </div>
+template&lt;typename MessageType, enable_if_copy_constructible&lt; MessageType &gt;  = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classmq_1_1_receiver.html">mq::Receiver</a>&lt; MessageType &gt;::set_blocking </td>
+          <td class="memname">void <a class="el" href="classmq_1_1_receiver.html">mq::Receiver</a>&lt; MessageType, &gt;::set_blocking </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>is_blocking</em>, </td>
@@ -201,7 +201,7 @@ template&lt;typename MessageType&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Set the <code><a class="el" href="classmq_1_1_receiver.html#ab7fd6f8c7b063f00d661a5eacae40100" title="Return an object of type MessageType.">Receiver::listen</a></code> method to a blocking or non-blocking mode. </p>
+<p>Set the <code><a class="el" href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1" title="Return an object of type MessageType.">Receiver::listen</a></code> method to a blocking or non-blocking mode. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">is_blocking</td><td>Blocking or non-blocking mode; </td></tr>
