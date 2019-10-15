@@ -8,7 +8,7 @@ In the `example` folder there is a basic example of usage. The library is aimed 
 
 The example can be compiled (with the GNU compiler for example) with (the -std=c++17 flag is needed only if your compiler does not use the C++17 standard by default):
 
-`g++ message_queue.cpp -std=c++17 -Wall -Wextra -Wpedantic`
+`g++ message_queue.cpp -std=c++17 -lpthread -Wall -Wextra -Wpedantic`
 
 Possible output:
 
