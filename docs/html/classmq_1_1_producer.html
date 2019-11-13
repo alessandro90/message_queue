@@ -95,9 +95,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a551e44f172e38a48547ce4cad9341a4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">set_max_len</a> (typename std::deque&lt; MessageType &gt;::size_type max_queue_size) noexcept</td></tr>
 <tr class="memdesc:a551e44f172e38a48547ce4cad9341a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum number of messages the queue can accumulate.  <a href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">More...</a><br /></td></tr>
 <tr class="separator:a551e44f172e38a48547ce4cad9341a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa17cbcc9b2783998499f7a7ebb89bd57"><td class="memItemLeft" align="right" valign="top"><a id="aa17cbcc9b2783998499f7a7ebb89bd57"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#aa17cbcc9b2783998499f7a7ebb89bd57">send</a> (MessageType &amp;&amp;message)</td></tr>
+<tr class="memdesc:aa17cbcc9b2783998499f7a7ebb89bd57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to any attached <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> (rvalue reference version). <br /></td></tr>
+<tr class="separator:aa17cbcc9b2783998499f7a7ebb89bd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba26182e0fe2752e5b60c121e2a85db3"><td class="memItemLeft" align="right" valign="top"><a id="aba26182e0fe2752e5b60c121e2a85db3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">send</a> (MessageType const &amp;message)</td></tr>
-<tr class="memdesc:aba26182e0fe2752e5b60c121e2a85db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to any attached <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a>. <br /></td></tr>
+<tr class="memdesc:aba26182e0fe2752e5b60c121e2a85db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to any attached <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> (lvalue reference version). <br /></td></tr>
 <tr class="separator:aba26182e0fe2752e5b60c121e2a85db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4582da5db4af15cff9b3f9f1a49d583e"><td class="memItemLeft" align="right" valign="top"><a id="a4582da5db4af15cff9b3f9f1a49d583e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">attach</a> (<a class="el" href="classmq_1_1_receiver.html">Receiver</a>&lt; MessageType &gt; &amp;receiver) noexcept</td></tr>
@@ -107,13 +111,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">set_full_queue_policy</a> (<a class="el" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">FullQueuePolicy</a> const &amp;policy) noexcept</td></tr>
 <tr class="memdesc:a6e737186a22fab4b804fd11349220a97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the policy to undertake if the reaches its maximum allowed size. <br /></td></tr>
 <tr class="separator:a6e737186a22fab4b804fd11349220a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b1c134ac647c771b0b0e74cb015beaf"><td class="memItemLeft" align="right" valign="top"><a id="a2b1c134ac647c771b0b0e74cb015beaf"></a>
-std::deque&lt; MessageType &gt;::size_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#a2b1c134ac647c771b0b0e74cb015beaf">queue_size</a> ()</td></tr>
-<tr class="memdesc:a2b1c134ac647c771b0b0e74cb015beaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current size of the message queue. <br /></td></tr>
-<tr class="separator:a2b1c134ac647c771b0b0e74cb015beaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fdb664405397f08e4a6c7bb244ba28f"><td class="memItemLeft" align="right" valign="top"><a id="a6fdb664405397f08e4a6c7bb244ba28f"></a>
+std::deque&lt; MessageType &gt;::size_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_producer.html#a6fdb664405397f08e4a6c7bb244ba28f">queue_size</a> () noexcept</td></tr>
+<tr class="memdesc:a6fdb664405397f08e4a6c7bb244ba28f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current size of the message queue. <br /></td></tr>
+<tr class="separator:a6fdb664405397f08e4a6c7bb244ba28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename MessageType, enable_if_copy_constructible&lt; MessageType &gt;&gt;<br />
+<div class="textblock"><h3>template&lt;typename MessageType, enabled&lt; MessageType &gt;&gt;<br />
 class mq::Producer&lt; MessageType, &gt;</h3>
 
 <p>The producer class is used to send messages to various receivers objects. </p>
@@ -125,7 +129,7 @@ class mq::Producer&lt; MessageType, &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename MessageType , enable_if_copy_constructible&lt; MessageType &gt; &gt; </div>
+template&lt;typename MessageType , enabled&lt; MessageType &gt; &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

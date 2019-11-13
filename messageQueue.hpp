@@ -20,10 +20,10 @@
 namespace mq {
 
     template<typename T, typename U = int>
-    using enable_if_copy_constructible = typename std::enable_if_t<std::is_copy_constructible_v<T>, U>;
+    using enabled = typename std::enable_if_t<std::is_copy_constructible_v<T>, U>;
 
 
-    template<typename MessageType, enable_if_copy_constructible<MessageType> = 0> class Producer;
+    template<typename MessageType, enabled<MessageType> = 0> class Producer;
 
     /** \brief Enum class describing if the queue is a FIFO or a LIFO. */
     enum class Mode {
@@ -43,6 +43,13 @@ namespace mq {
         DO_NOTHING,
         SUB_FRONT,
         REMOVE_BACK,
+        THROW,
+    };
+
+
+/** \brief  Enum class which describes the action to undertake if the queue is empty in a non-blocking scenario. */
+    enum class EmptyQueuePolicy {
+        DO_NOTHING,
         THROW,
     };
 
@@ -81,29 +88,24 @@ namespace mq {
      * Can listen for an arbitrary (copyable) MessageType. It holds a pointer to a
      * message queue object belonging to a Producer object.
      */
-    template<typename MessageType, enable_if_copy_constructible<MessageType> = 0>
+    template<typename MessageType, enabled<MessageType> = 0>
     class Receiver {
 
     public:
-        /** \brief Return an object of type MessageType.
+        /** \brief Return \c true if a message has been retrieved, \c false otherwise.
          * 
          * The call can be either blocking or non-blocking depending on how the
          * receiver has been set. If the receiver is detached throws a \c DetachedListenerException.
          * Also \c EmptyQueueException or \c WaitTimeoutException can be thrown, depending on how
          * the receiver has been set.
         */
-        MessageType listen() {
+        bool listen(MessageType &message) {
             if (is_detached) throw DetachedListenerException{};
-            MessageType message;
             try {
-                if (is_blocking)
-                    message = get_message_blocking();
-                else
-                    message = get_message_non_blocking();
+                return is_blocking ? get_message_blocking(message) : get_message_non_blocking(message);
             } catch (BaseMessageQueueException const& e) {
                 throw;
             }
-            return message;
         }
 
         /** \brief Set the \c Receiver::listen method to a blocking or non-blocking mode.
@@ -130,24 +132,24 @@ namespace mq {
         }
 
         /** \brief Get the queue mode */
-        Mode mode() {
+        Mode mode() noexcept {
             return queue_mode;
         }
 
         /** \brief Return \c true if the Receiver has a blocking \c listen method */
-        bool blocking() {
+        bool blocking() noexcept {
             return is_blocking;
         }
 
         /** \brief Detach the Receiver from the Producer */
-        void detach() {
+        void detach() noexcept {
             message_queue = nullptr;
             queue_rw = nullptr;
             is_detached = true;
         }
 
         /** \brief Return whether the Receiver is in a detached state. */
-        bool detached() {
+        bool detached() noexcept {
             return is_detached;
         }
 
@@ -161,25 +163,27 @@ namespace mq {
         bool is_blocking{false}, is_detached{true};
         long int timeout{120};
         float wait_time{1.};
+        EmptyQueuePolicy empty_queue_policy{EmptyQueuePolicy::DO_NOTHING};
 
-        /** \brief Return a message in non-blocking mode and remove the message
-         * from the queue if consumed(message) returns true */
-        MessageType get_message_non_blocking() {
-            MessageType message;
+        /** \brief Return \c true if a message has been retrieved, \c false otherwise.
+         * The function is non-blocking and removes the message
+         * from the queue if \c consumed(message) returns \c true */
+        bool get_message_non_blocking(MessageType &message) {
             if (std::lock_guard lck{*queue_rw}; !message_queue->empty()) {
                 message = extract_message();
                 if (consumed(message)) pop_message();
+                return true;
+            } else if (empty_queue_policy == EmptyQueuePolicy::DO_NOTHING) {
+                return false;
             } else {
                 throw EmptyQueueException{};
             }
-            return message;
         }
 
 
-        /** \brief Return a message in blocking mode and remove the message
-         * from the queue if consumed(message) returns true */
-        MessageType get_message_blocking() {
-            MessageType message;
+        /** \brief Return \c true if a message has been retrieved, \c false otherwise.
+         * Remove the message from the queue if \c consumed(message) returns \c true */
+        bool get_message_blocking(MessageType &message) {
             auto now = std::chrono::system_clock::now();
             while (true) {
                 std::unique_lock ulck(*queue_rw);
@@ -187,7 +191,7 @@ namespace mq {
                     message = extract_message();
                     if (consumed(message)) pop_message();
                     ulck.unlock();
-                    return message;
+                    return true;
                 } else {
                     ulck.unlock();
                     if (
@@ -207,13 +211,11 @@ namespace mq {
 
         /** \brief Extract a message from the message queue. */
         MessageType extract_message() {
-            MessageType message;
             if (queue_mode == Mode::LIFO) {
-                message = message_queue->back();
-            } else if (queue_mode == Mode::FIFO) {
-                message = message_queue->front();
+                return message_queue->back();
+            } else {
+                return message_queue->front();
             }
-            return message;
         }
 
         /** \brief Remove a message from the queue. */
@@ -249,7 +251,7 @@ namespace mq {
      * 
      * Instances of this class cannot be copy-constructed or copy-assigned, but can be moved.
      * Any number of listeners can be attached to a single instance. */
-    template<typename MessageType, enable_if_copy_constructible<MessageType>>
+    template<typename MessageType, enabled<MessageType>>
     class Producer {
 
     public:
@@ -267,8 +269,20 @@ namespace mq {
             this->max_queue_size = max_queue_size;
         }
 
-        /** \brief Send a message to any attached Receiver. */
-        void send(MessageType const& message) {
+        /** \brief Send a message to any attached Receiver (rvalue reference version). */
+        void send(MessageType &&message) {
+            if (
+                std::lock_guard grd{queue_rw};
+                message_queue.size() >= max_queue_size
+            ) {
+                apply_full_queue_policy(message);
+            } else {
+                message_queue.push_back(std::move(message));
+            }
+        }
+
+        /** \brief Send a message to any attached Receiver (lvalue reference version). */
+        void send(MessageType const &message) {
             if (
                 std::lock_guard grd{queue_rw};
                 message_queue.size() >= max_queue_size
@@ -292,7 +306,7 @@ namespace mq {
         }
 
         /** \brief Return the current size of the message queue. */
-        typename std::deque<MessageType>::size_type queue_size() {
+        typename std::deque<MessageType>::size_type queue_size() noexcept {
             std::lock_guard lck{queue_rw};
             return message_queue.size();
         }

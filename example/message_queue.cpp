@@ -20,12 +20,18 @@ enum class Action {
     ACTION_5,
     ACTION_6,
     ACTION_7,
-
 };
 
 std::ostream& operator<<(std::ostream& os, Action const& action) {
     os << static_cast<int>(action);
     return os;
+}
+
+template<std::size_t N>
+bool message_consumable(std::array<Action, N> const &actions, Action const& message) noexcept {
+    for (Action const &a : actions)
+        if (a == message) return true;
+    return false;
 }
 
 class ListenerOne: public mq::Receiver<Action> {
@@ -35,10 +41,7 @@ class ListenerOne: public mq::Receiver<Action> {
         Action::ACTION_3,
     };
     virtual bool consumed(Action const& message) const noexcept override {
-        for (auto&& a : actions) {
-            if (message == a) return true;
-        }
-        return false;
+        return message_consumable(actions, message);
     }
 };
 
@@ -49,11 +52,9 @@ class ListenerTwo: public mq::Receiver<Action> {
         Action::ACTION_6,
         Action::ACTION_7,
     };
+
     virtual bool consumed(Action const& message) const noexcept override {
-        for (auto&& a : actions) {
-            if (message == a) return true;
-        }
-        return false;
+        return message_consumable(actions, message);
     }
 };
 
@@ -86,11 +87,10 @@ public:
         while (true) {
             Action message{Action::ACTION_NONE};
             try {
-                message = receiver.listen();
+                if (receiver.listen(message)) process(message);
             } catch (mq::BaseMessageQueueException const& e) {
                 std::cout << e.what() << "\n" << std::flush;
             }
-            process(message);
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(duration(dis(gen)));
         }
@@ -128,9 +128,8 @@ public:
         while (true) {
             Action message{Action::ACTION_NONE};
             try{
-                message = receiver.listen();
+                if (receiver.listen(message)) process(message);
             } catch (mq::BaseMessageQueueException const& e) {}
-            process(message);
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(duration(dis(gen)));
         }

@@ -80,274 +80,286 @@ $(function() {
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>mq {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U = <span class="keywordtype">int</span>&gt;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">using</span> enable_if_copy_constructible = <span class="keyword">typename</span> std::enable_if_t&lt;std::is_copy_constructible_v&lt;T&gt;, U&gt;;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">using</span> enabled = <span class="keyword">typename</span> std::enable_if_t&lt;std::is_copy_constructible_v&lt;T&gt;, U&gt;;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// template&lt;typename MessageType, typename = enable_if_copy_constructible&lt;MessageType&gt;&gt; class Producer;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">// template&lt;typename MessageType, typename std::enable_if_t&lt;std::is_copy_constructible_v&lt;MessageType&gt;, int&gt; = 0&gt; class Producer;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html">   27</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enable_if_copy_constructible&lt;MessageType&gt; = 0&gt; <span class="keyword">class </span><a class="code" href="classmq_1_1_producer.html">Producer</a>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">   30</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        FIFO,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        LIFO,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    };</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html">   26</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enabled&lt;MessageType&gt; = 0&gt; <span class="keyword">class </span><a class="code" href="classmq_1_1_producer.html">Producer</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">   29</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        FIFO,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        LIFO,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    };</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">   43</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">FullQueuePolicy</a> {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        DO_NOTHING,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        SUB_FRONT,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        REMOVE_BACK,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        THROW,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    };</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">   42</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">FullQueuePolicy</a> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        DO_NOTHING,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        SUB_FRONT,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        REMOVE_BACK,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        THROW,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    };</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classmq_1_1_base_message_queue_exception.html">   52</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a>: <span class="keyword">public</span> std::exception {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: Base exception message.&quot;</span>};</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> noexcept {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">return</span> msg;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }        </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    };</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classmq_1_1_full_queue_exception.html">   61</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_full_queue_exception.html">FullQueueException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: Message queue reached maximum value.&quot;</span>};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classmq_1_1_empty_queue_exception.html">   66</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_empty_queue_exception.html">EmptyQueueException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: No message to process.&quot;</span>};</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    };</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classmq_1_1_detached_listener_exception.html">   71</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_detached_listener_exception.html">DetachedListenerException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: your Receiver is detached.&quot;</span>};</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classmq_1_1_wait_timeout_exception.html">   76</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_wait_timeout_exception.html">WaitTimeoutException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: elapsed timeout waiting for message.&quot;</span>};</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enable_if_copy_constructible&lt;MessageType&gt; = 0&gt;</div>
-<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html">   86</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_receiver.html">Receiver</a> {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1">   96</a></span>&#160;        MessageType <a class="code" href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1">listen</a>() {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordflow">if</span> (is_detached) <span class="keywordflow">throw</span> <a class="code" href="classmq_1_1_detached_listener_exception.html">DetachedListenerException</a>{};</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            MessageType message;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                <span class="keywordflow">if</span> (is_blocking)</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                    message = get_message_blocking();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    message = get_message_non_blocking();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            } <span class="keywordflow">catch</span> (<a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> <span class="keyword">const</span>&amp; e) {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">throw</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> message;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">  118</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">set_blocking</a>(</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordtype">bool</span> is_blocking,</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            <span class="keywordtype">long</span> <span class="keywordtype">int</span> timeout = 120,</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordtype">float</span> wait_time = 0.5</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        ) noexcept {</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            this-&gt;is_blocking = is_blocking;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            this-&gt;timeout = timeout;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            this-&gt;wait_time = wait_time;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        }</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">  129</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">set_mode</a>(<a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> <span class="keyword">const</span>&amp; queue_mode) noexcept {</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            this-&gt;queue_mode = queue_mode;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        }</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#ac99b6c556439b656cc194da6ed831c77">  134</a></span>&#160;        <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> <a class="code" href="classmq_1_1_receiver.html#ac99b6c556439b656cc194da6ed831c77">mode</a>() {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">return</span> queue_mode;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#ad0553545e313f8bf65b2a16138b1468d">  139</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#ad0553545e313f8bf65b2a16138b1468d">blocking</a>() {</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordflow">return</span> is_blocking;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#a0233d7de119da26417700f8cbd479f7c">  144</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#a0233d7de119da26417700f8cbd479f7c">detach</a>() {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            message_queue = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            queue_rw = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            is_detached = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        }</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#ad3e1b143f8707622f7517f2bf1f7ed30">  151</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#ad3e1b143f8707622f7517f2bf1f7ed30">detached</a>() {</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="keywordflow">return</span> is_detached;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classmq_1_1_producer.html">Producer</a>&lt;MessageType&gt;;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        std::deque&lt;MessageType&gt; *message_queue{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::mutex *queue_rw{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> queue_mode{Mode::FIFO};</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">bool</span> is_blocking{<span class="keyword">false</span>}, is_detached{<span class="keyword">true</span>};</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">int</span> timeout{120};</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">float</span> wait_time{1.};</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        MessageType get_message_non_blocking() {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            MessageType message;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <span class="keywordflow">if</span> (std::lock_guard lck{*queue_rw}; !message_queue-&gt;empty()) {</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                message = extract_message();</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(message)) pop_message();</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <span class="keywordflow">throw</span> EmptyQueueException{};</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            }</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">return</span> message;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        }</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        MessageType get_message_blocking() {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            MessageType message;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keyword">auto</span> now = std::chrono::system_clock::now();</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                std::unique_lock ulck(*queue_rw);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                <span class="keywordflow">if</span> (!message_queue-&gt;empty()) {</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                    message = extract_message();</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">if</span> (<a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(message)) pop_message();</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                    ulck.unlock();</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    <span class="keywordflow">return</span> message;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="message_queue_8hpp.html#a0d05a8e78bab8a3584942b0a46166d9c">   51</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="message_queue_8hpp.html#a0d05a8e78bab8a3584942b0a46166d9c">EmptyQueuePolicy</a> {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        DO_NOTHING,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        THROW,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    };</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classmq_1_1_base_message_queue_exception.html">   58</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> : <span class="keyword">public</span> std::exception {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: Base exception message.&quot;</span>};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> noexcept {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">return</span> msg;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }        </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classmq_1_1_full_queue_exception.html">   67</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_full_queue_exception.html">FullQueueException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: Message queue reached maximum value.&quot;</span>};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    };</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classmq_1_1_empty_queue_exception.html">   72</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_empty_queue_exception.html">EmptyQueueException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: No message to process.&quot;</span>};</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    };</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classmq_1_1_detached_listener_exception.html">   77</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_detached_listener_exception.html">DetachedListenerException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: your Receiver is detached.&quot;</span>};</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    };</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classmq_1_1_wait_timeout_exception.html">   82</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_wait_timeout_exception.html">WaitTimeoutException</a>: <span class="keyword">public</span> <a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *msg{<span class="stringliteral">&quot;Error: elapsed timeout waiting for message.&quot;</span>};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    };</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enabled&lt;MessageType&gt; = 0&gt;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html">   92</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classmq_1_1_receiver.html">Receiver</a> {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#a101a1c77e30184e0a76a5832538a3ad3">  102</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#a101a1c77e30184e0a76a5832538a3ad3">listen</a>(MessageType &amp;message) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span> (is_detached) <span class="keywordflow">throw</span> <a class="code" href="classmq_1_1_detached_listener_exception.html">DetachedListenerException</a>{};</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">return</span> is_blocking ? get_message_blocking(message) : get_message_non_blocking(message);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            } <span class="keywordflow">catch</span> (<a class="code" href="classmq_1_1_base_message_queue_exception.html">BaseMessageQueueException</a> <span class="keyword">const</span>&amp; e) {</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="keywordflow">throw</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">  119</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">set_blocking</a>(</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            <span class="keywordtype">bool</span> is_blocking,</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordtype">long</span> <span class="keywordtype">int</span> timeout = 120,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <span class="keywordtype">float</span> wait_time = 0.5</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        ) noexcept {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            this-&gt;is_blocking = is_blocking;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            this-&gt;timeout = timeout;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            this-&gt;wait_time = wait_time;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        }</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">  130</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">set_mode</a>(<a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> <span class="keyword">const</span>&amp; queue_mode) noexcept {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            this-&gt;queue_mode = queue_mode;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        }</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#aa46385db4133ce97d7d79901b14476bc">  135</a></span>&#160;        <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> <a class="code" href="classmq_1_1_receiver.html#aa46385db4133ce97d7d79901b14476bc">mode</a>() noexcept {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="keywordflow">return</span> queue_mode;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#a711accd74700651f1dc95b961c8f3fa7">  140</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#a711accd74700651f1dc95b961c8f3fa7">blocking</a>() noexcept {</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;            <span class="keywordflow">return</span> is_blocking;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        }</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#acc529d2df46dfb984e63f9171edafb2f">  145</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_receiver.html#acc529d2df46dfb984e63f9171edafb2f">detach</a>() noexcept {</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            message_queue = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            queue_rw = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            is_detached = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classmq_1_1_receiver.html#abd2a95e6b7d927d40055fac31ab4a0a6">  152</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#abd2a95e6b7d927d40055fac31ab4a0a6">detached</a>() noexcept {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <span class="keywordflow">return</span> is_detached;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classmq_1_1_producer.html">Producer</a>&lt;MessageType&gt;;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::deque&lt;MessageType&gt; *message_queue{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        std::mutex *queue_rw{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <a class="code" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> queue_mode{Mode::FIFO};</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordtype">bool</span> is_blocking{<span class="keyword">false</span>}, is_detached{<span class="keyword">true</span>};</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">int</span> timeout{120};</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">float</span> wait_time{1.};</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <a class="code" href="message_queue_8hpp.html#a0d05a8e78bab8a3584942b0a46166d9c">EmptyQueuePolicy</a> empty_queue_policy{EmptyQueuePolicy::DO_NOTHING};</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">bool</span> get_message_non_blocking(MessageType &amp;message) {</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">if</span> (std::lock_guard lck{*queue_rw}; !message_queue-&gt;empty()) {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                message = extract_message();</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(message)) pop_message();</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (empty_queue_policy == EmptyQueuePolicy::DO_NOTHING) {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                <span class="keywordflow">throw</span> EmptyQueueException{};</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            }</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        }</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordtype">bool</span> get_message_blocking(MessageType &amp;message) {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            <span class="keyword">auto</span> now = std::chrono::system_clock::now();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                std::unique_lock ulck(*queue_rw);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                <span class="keywordflow">if</span> (!message_queue-&gt;empty()) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    message = extract_message();</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                    <span class="keywordflow">if</span> (<a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(message)) pop_message();</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                    ulck.unlock();</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                    <span class="keywordflow">if</span> (</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                        timeout &gt; 0 &amp;&amp;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                        std::chrono::duration&lt;float&gt;(</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                            std::chrono::system_clock::now() - now</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                        ).count() &gt;= timeout</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                    ) {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                        <span class="keywordflow">throw</span> WaitTimeoutException{};</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                    }</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                    std::this_thread::sleep_for(</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                        std::chrono::duration&lt;float&gt;(wait_time)</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                    );</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                }</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        MessageType extract_message() {</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            MessageType message;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">if</span> (queue_mode == Mode::LIFO) {</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                message = message_queue-&gt;back();</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (queue_mode == Mode::FIFO) {</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                message = message_queue-&gt;front();</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            }</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            <span class="keywordflow">return</span> message;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordtype">void</span> pop_message() {</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordflow">if</span> (queue_mode == Mode::LIFO) {</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                message_queue-&gt;pop_back();</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (queue_mode == Mode::FIFO) {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                message_queue-&gt;pop_front();</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            }</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordtype">void</span> set_message_queue(</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            std::deque&lt;MessageType&gt;&amp; producer_message_queue</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        ) noexcept {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            message_queue = &amp;producer_message_queue;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        }</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordtype">void</span> set_mutex(std::mutex&amp; m) noexcept {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            queue_rw = &amp;m;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(MessageType <span class="keyword">const</span>&amp; message) <span class="keyword">const</span> noexcept = 0;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    };</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                    ulck.unlock();</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                    <span class="keywordflow">if</span> (</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                        timeout &gt; 0 &amp;&amp;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                        std::chrono::duration&lt;float&gt;(</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                            std::chrono::system_clock::now() - now</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                        ).count() &gt;= timeout</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                    ) {</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                        <span class="keywordflow">throw</span> WaitTimeoutException{};</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                    }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                    std::this_thread::sleep_for(</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                        std::chrono::duration&lt;float&gt;(wait_time)</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                    );</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        MessageType extract_message() {</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            <span class="keywordflow">if</span> (queue_mode == Mode::LIFO) {</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                <span class="keywordflow">return</span> message_queue-&gt;back();</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                <span class="keywordflow">return</span> message_queue-&gt;front();</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordtype">void</span> pop_message() {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">if</span> (queue_mode == Mode::LIFO) {</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                message_queue-&gt;pop_back();</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (queue_mode == Mode::FIFO) {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                message_queue-&gt;pop_front();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            }</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordtype">void</span> set_message_queue(</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            std::deque&lt;MessageType&gt;&amp; producer_message_queue</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        ) noexcept {</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            message_queue = &amp;producer_message_queue;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keywordtype">void</span> set_mutex(std::mutex&amp; m) noexcept {</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            queue_rw = &amp;m;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        }</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">consumed</a>(MessageType <span class="keyword">const</span>&amp; message) <span class="keyword">const</span> noexcept = 0;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    };</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enable_if_copy_constructible&lt;MessageType&gt;&gt;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keyword">class </span>Producer {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        Producer(Producer <span class="keyword">const</span>&amp; p) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        Producer&amp; operator=(Producer <span class="keyword">const</span>&amp; p) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        Producer() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        Producer(Producer&amp;&amp; p) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        Producer&amp; operator=(Producer&amp;&amp; p) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
-<div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">  267</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">set_max_len</a>(<span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type max_queue_size) noexcept {</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            this-&gt;max_queue_size = max_queue_size;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        }</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
-<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">  272</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">send</a>(MessageType <span class="keyword">const</span>&amp; message) {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keywordflow">if</span> (</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                std::lock_guard grd{queue_rw};</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                message_queue.size() &gt;= max_queue_size</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            ) {</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                apply_full_queue_policy(message);</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                message_queue.push_back(message);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            }</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">  284</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">attach</a>(<a class="code" href="classmq_1_1_receiver.html">Receiver&lt;MessageType&gt;</a>&amp; receiver) noexcept {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            receiver.set_message_queue(message_queue);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            receiver.set_mutex(queue_rw);</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            receiver.is_detached = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">  291</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">set_full_queue_policy</a>(<a class="code" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">FullQueuePolicy</a> <span class="keyword">const</span>&amp; policy) noexcept {</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;            full_queue_policy = policy;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        }</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
-<div class="line"><a name="l00296"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a2b1c134ac647c771b0b0e74cb015beaf">  296</a></span>&#160;        <span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type <a class="code" href="classmq_1_1_producer.html#a2b1c134ac647c771b0b0e74cb015beaf">queue_size</a>() {</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            std::lock_guard lck{queue_rw};</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            <span class="keywordflow">return</span> message_queue.size();</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type max_queue_size{0};</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        std::deque&lt;MessageType&gt; message_queue;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        std::mutex queue_rw;  <span class="comment">// * Cannot be copied</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        FullQueuePolicy full_queue_policy{FullQueuePolicy::DO_NOTHING};</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keywordtype">void</span> apply_full_queue_policy(MessageType <span class="keyword">const</span>&amp; message) {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">switch</span> (full_queue_policy) {</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::DO_NOTHING:</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::SUB_FRONT:</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                message_queue.front() = message;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::REMOVE_BACK:</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                message_queue.pop_back();</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                message_queue.push_back(message);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::THROW:</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                <span class="keywordflow">throw</span> FullQueueException{};</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            }</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        }</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    };</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MessageType, enabled&lt;MessageType&gt;&gt;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keyword">class </span>Producer {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        Producer(Producer <span class="keyword">const</span>&amp; p) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        Producer&amp; operator=(Producer <span class="keyword">const</span>&amp; p) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        Producer() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        Producer(Producer&amp;&amp; p) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        Producer&amp; operator=(Producer&amp;&amp; p) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">  268</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">set_max_len</a>(<span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type max_queue_size) noexcept {</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            this-&gt;max_queue_size = max_queue_size;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#aa17cbcc9b2783998499f7a7ebb89bd57">  273</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#aa17cbcc9b2783998499f7a7ebb89bd57">send</a>(MessageType &amp;&amp;message) {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            <span class="keywordflow">if</span> (</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                std::lock_guard grd{queue_rw};</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                message_queue.size() &gt;= max_queue_size</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            ) {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                apply_full_queue_policy(message);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                message_queue.push_back(std::move(message));</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            }</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        }</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">  285</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">send</a>(MessageType <span class="keyword">const</span> &amp;message) {</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="keywordflow">if</span> (</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                std::lock_guard grd{queue_rw};</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                message_queue.size() &gt;= max_queue_size</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            ) {</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                apply_full_queue_policy(message);</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                message_queue.push_back(message);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            }</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">  297</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">attach</a>(<a class="code" href="classmq_1_1_receiver.html">Receiver&lt;MessageType&gt;</a>&amp; receiver) noexcept {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            receiver.set_message_queue(message_queue);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            receiver.set_mutex(queue_rw);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            receiver.is_detached = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        }</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">  304</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">set_full_queue_policy</a>(<a class="code" href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">FullQueuePolicy</a> <span class="keyword">const</span>&amp; policy) noexcept {</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            full_queue_policy = policy;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        }</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno"><a class="line" href="classmq_1_1_producer.html#a6fdb664405397f08e4a6c7bb244ba28f">  309</a></span>&#160;        <span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type <a class="code" href="classmq_1_1_producer.html#a6fdb664405397f08e4a6c7bb244ba28f">queue_size</a>() noexcept {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            std::lock_guard lck{queue_rw};</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            <span class="keywordflow">return</span> message_queue.size();</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keyword">typename</span> std::deque&lt;MessageType&gt;::size_type max_queue_size{0};</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        std::deque&lt;MessageType&gt; message_queue;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        std::mutex queue_rw;  <span class="comment">// * Cannot be copied</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        FullQueuePolicy full_queue_policy{FullQueuePolicy::DO_NOTHING};</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordtype">void</span> apply_full_queue_policy(MessageType <span class="keyword">const</span>&amp; message) {</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keywordflow">switch</span> (full_queue_policy) {</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::DO_NOTHING:</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::SUB_FRONT:</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                message_queue.front() = message;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::REMOVE_BACK:</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                message_queue.pop_back();</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                message_queue.push_back(message);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            <span class="keywordflow">case</span> FullQueuePolicy::THROW:</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                <span class="keywordflow">throw</span> FullQueueException{};</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            }</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        }</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    };</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;}</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassmq_1_1_wait_timeout_exception_html"><div class="ttname"><a href="classmq_1_1_wait_timeout_exception.html">mq::WaitTimeoutException</a></div><div class="ttdoc">Thrown when a blocking .listen() call reaches the specified timeout.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:76</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html"><div class="ttname"><a href="classmq_1_1_receiver.html">mq::Receiver</a></div><div class="ttdoc">Abstract base class template.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:86</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_a0233d7de119da26417700f8cbd479f7c"><div class="ttname"><a href="classmq_1_1_receiver.html#a0233d7de119da26417700f8cbd479f7c">mq::Receiver::detach</a></div><div class="ttdeci">void detach()</div><div class="ttdoc">Detach the Receiver from the Producer.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:144</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html_aba26182e0fe2752e5b60c121e2a85db3"><div class="ttname"><a href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">mq::Producer::send</a></div><div class="ttdeci">void send(MessageType const &amp;message)</div><div class="ttdoc">Send a message to any attached Receiver.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:272</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_ad3e1b143f8707622f7517f2bf1f7ed30"><div class="ttname"><a href="classmq_1_1_receiver.html#ad3e1b143f8707622f7517f2bf1f7ed30">mq::Receiver::detached</a></div><div class="ttdeci">bool detached()</div><div class="ttdoc">Return whether the Receiver is in a detached state.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:151</div></div>
-<div class="ttc" id="aclassmq_1_1_detached_listener_exception_html"><div class="ttname"><a href="classmq_1_1_detached_listener_exception.html">mq::DetachedListenerException</a></div><div class="ttdoc">Thrown when .listen() is called from a Receiver not connected with a queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:71</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_ad0553545e313f8bf65b2a16138b1468d"><div class="ttname"><a href="classmq_1_1_receiver.html#ad0553545e313f8bf65b2a16138b1468d">mq::Receiver::blocking</a></div><div class="ttdeci">bool blocking()</div><div class="ttdoc">Return true if the Receiver has a blocking listen method.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:139</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html_a6e737186a22fab4b804fd11349220a97"><div class="ttname"><a href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">mq::Producer::set_full_queue_policy</a></div><div class="ttdeci">void set_full_queue_policy(FullQueuePolicy const &amp;policy) noexcept</div><div class="ttdoc">Set the policy to undertake if the reaches its maximum allowed size.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:291</div></div>
-<div class="ttc" id="aclassmq_1_1_empty_queue_exception_html"><div class="ttname"><a href="classmq_1_1_empty_queue_exception.html">mq::EmptyQueueException</a></div><div class="ttdoc">Thrown when a Receiver try to get a message fron an empty queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:66</div></div>
-<div class="ttc" id="aclassmq_1_1_base_message_queue_exception_html"><div class="ttname"><a href="classmq_1_1_base_message_queue_exception.html">mq::BaseMessageQueueException</a></div><div class="ttdoc">Base exception class.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:52</div></div>
-<div class="ttc" id="amessage_queue_8hpp_html_a7b44a853838cefea5eedb31cfc1808c9"><div class="ttname"><a href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">mq::FullQueuePolicy</a></div><div class="ttdeci">FullQueuePolicy</div><div class="ttdoc">Enum class which describes the action to undertake if the queue is full.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:43</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_aed41141a3ee7b90e364bf78775706cca"><div class="ttname"><a href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">mq::Receiver::set_mode</a></div><div class="ttdeci">void set_mode(Mode const &amp;queue_mode) noexcept</div><div class="ttdoc">Set the queue mode (FIFO or LIFO)</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:129</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html_a2b1c134ac647c771b0b0e74cb015beaf"><div class="ttname"><a href="classmq_1_1_producer.html#a2b1c134ac647c771b0b0e74cb015beaf">mq::Producer::queue_size</a></div><div class="ttdeci">std::deque&lt; MessageType &gt;::size_type queue_size()</div><div class="ttdoc">Return the current size of the message queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:296</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_a08b1c5e10870878ee4739e8ebe120d22"><div class="ttname"><a href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">mq::Receiver::set_blocking</a></div><div class="ttdeci">void set_blocking(bool is_blocking, long int timeout=120, float wait_time=0.5) noexcept</div><div class="ttdoc">Set the Receiver::listen method to a blocking or non-blocking mode.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:118</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_ae44ef06bae6b5cdf67b6daebfd4569d1"><div class="ttname"><a href="classmq_1_1_receiver.html#ae44ef06bae6b5cdf67b6daebfd4569d1">mq::Receiver::listen</a></div><div class="ttdeci">MessageType listen()</div><div class="ttdoc">Return an object of type MessageType.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:96</div></div>
+<div class="ttc" id="aclassmq_1_1_wait_timeout_exception_html"><div class="ttname"><a href="classmq_1_1_wait_timeout_exception.html">mq::WaitTimeoutException</a></div><div class="ttdoc">Thrown when a blocking .listen() call reaches the specified timeout.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:82</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html"><div class="ttname"><a href="classmq_1_1_receiver.html">mq::Receiver</a></div><div class="ttdoc">Abstract base class template.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:92</div></div>
+<div class="ttc" id="amessage_queue_8hpp_html_a0d05a8e78bab8a3584942b0a46166d9c"><div class="ttname"><a href="message_queue_8hpp.html#a0d05a8e78bab8a3584942b0a46166d9c">mq::EmptyQueuePolicy</a></div><div class="ttdeci">EmptyQueuePolicy</div><div class="ttdoc">Enum class which describes the action to undertake if the queue is empty in a non-blocking scenario.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:51</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_aba26182e0fe2752e5b60c121e2a85db3"><div class="ttname"><a href="classmq_1_1_producer.html#aba26182e0fe2752e5b60c121e2a85db3">mq::Producer::send</a></div><div class="ttdeci">void send(MessageType const &amp;message)</div><div class="ttdoc">Send a message to any attached Receiver (lvalue reference version).</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:285</div></div>
+<div class="ttc" id="aclassmq_1_1_detached_listener_exception_html"><div class="ttname"><a href="classmq_1_1_detached_listener_exception.html">mq::DetachedListenerException</a></div><div class="ttdoc">Thrown when .listen() is called from a Receiver not connected with a queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:77</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_a6e737186a22fab4b804fd11349220a97"><div class="ttname"><a href="classmq_1_1_producer.html#a6e737186a22fab4b804fd11349220a97">mq::Producer::set_full_queue_policy</a></div><div class="ttdeci">void set_full_queue_policy(FullQueuePolicy const &amp;policy) noexcept</div><div class="ttdoc">Set the policy to undertake if the reaches its maximum allowed size.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:304</div></div>
+<div class="ttc" id="aclassmq_1_1_empty_queue_exception_html"><div class="ttname"><a href="classmq_1_1_empty_queue_exception.html">mq::EmptyQueueException</a></div><div class="ttdoc">Thrown when a Receiver try to get a message fron an empty queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:72</div></div>
+<div class="ttc" id="aclassmq_1_1_base_message_queue_exception_html"><div class="ttname"><a href="classmq_1_1_base_message_queue_exception.html">mq::BaseMessageQueueException</a></div><div class="ttdoc">Base exception class.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:58</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_a6fdb664405397f08e4a6c7bb244ba28f"><div class="ttname"><a href="classmq_1_1_producer.html#a6fdb664405397f08e4a6c7bb244ba28f">mq::Producer::queue_size</a></div><div class="ttdeci">std::deque&lt; MessageType &gt;::size_type queue_size() noexcept</div><div class="ttdoc">Return the current size of the message queue.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:309</div></div>
+<div class="ttc" id="amessage_queue_8hpp_html_a7b44a853838cefea5eedb31cfc1808c9"><div class="ttname"><a href="message_queue_8hpp.html#a7b44a853838cefea5eedb31cfc1808c9">mq::FullQueuePolicy</a></div><div class="ttdeci">FullQueuePolicy</div><div class="ttdoc">Enum class which describes the action to undertake if the queue is full.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:42</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_a101a1c77e30184e0a76a5832538a3ad3"><div class="ttname"><a href="classmq_1_1_receiver.html#a101a1c77e30184e0a76a5832538a3ad3">mq::Receiver::listen</a></div><div class="ttdeci">bool listen(MessageType &amp;message)</div><div class="ttdoc">Return true if a message has been retrieved, false otherwise.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:102</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_aed41141a3ee7b90e364bf78775706cca"><div class="ttname"><a href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">mq::Receiver::set_mode</a></div><div class="ttdeci">void set_mode(Mode const &amp;queue_mode) noexcept</div><div class="ttdoc">Set the queue mode (FIFO or LIFO)</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:130</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_a08b1c5e10870878ee4739e8ebe120d22"><div class="ttname"><a href="classmq_1_1_receiver.html#a08b1c5e10870878ee4739e8ebe120d22">mq::Receiver::set_blocking</a></div><div class="ttdeci">void set_blocking(bool is_blocking, long int timeout=120, float wait_time=0.5) noexcept</div><div class="ttdoc">Set the Receiver::listen method to a blocking or non-blocking mode.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:119</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_aa46385db4133ce97d7d79901b14476bc"><div class="ttname"><a href="classmq_1_1_receiver.html#aa46385db4133ce97d7d79901b14476bc">mq::Receiver::mode</a></div><div class="ttdeci">Mode mode() noexcept</div><div class="ttdoc">Get the queue mode.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:135</div></div>
 <div class="ttc" id="aclassmq_1_1_receiver_html_a9b4e00578c56146388c1095caba810a1"><div class="ttname"><a href="classmq_1_1_receiver.html#a9b4e00578c56146388c1095caba810a1">mq::Receiver::consumed</a></div><div class="ttdeci">virtual bool consumed(MessageType const &amp;message) const noexcept=0</div><div class="ttdoc">Pure virtual function which is used to test if a message can be removed from the message queue.</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html"><div class="ttname"><a href="classmq_1_1_producer.html">mq::Producer</a></div><div class="ttdoc">The producer class is used to send messages to various receivers objects.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:27</div></div>
-<div class="ttc" id="aclassmq_1_1_full_queue_exception_html"><div class="ttname"><a href="classmq_1_1_full_queue_exception.html">mq::FullQueueException</a></div><div class="ttdoc">Thrown when the message queue is full and FullQueuePolicy::THROW is specified.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:61</div></div>
-<div class="ttc" id="amessage_queue_8hpp_html_af914ef7706dfb2637713a63808dba5b3"><div class="ttname"><a href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">mq::Mode</a></div><div class="ttdeci">Mode</div><div class="ttdoc">Enum class describing if the queue is a FIFO or a LIFO.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:30</div></div>
-<div class="ttc" id="aclassmq_1_1_receiver_html_ac99b6c556439b656cc194da6ed831c77"><div class="ttname"><a href="classmq_1_1_receiver.html#ac99b6c556439b656cc194da6ed831c77">mq::Receiver::mode</a></div><div class="ttdeci">Mode mode()</div><div class="ttdoc">Get the queue mode.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:134</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html_a551e44f172e38a48547ce4cad9341a4e"><div class="ttname"><a href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">mq::Producer::set_max_len</a></div><div class="ttdeci">void set_max_len(typename std::deque&lt; MessageType &gt;::size_type max_queue_size) noexcept</div><div class="ttdoc">Set the maximum number of messages the queue can accumulate.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:267</div></div>
-<div class="ttc" id="aclassmq_1_1_producer_html_a4582da5db4af15cff9b3f9f1a49d583e"><div class="ttname"><a href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">mq::Producer::attach</a></div><div class="ttdeci">void attach(Receiver&lt; MessageType &gt; &amp;receiver) noexcept</div><div class="ttdoc">Attach a Receiver.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:284</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_acc529d2df46dfb984e63f9171edafb2f"><div class="ttname"><a href="classmq_1_1_receiver.html#acc529d2df46dfb984e63f9171edafb2f">mq::Receiver::detach</a></div><div class="ttdeci">void detach() noexcept</div><div class="ttdoc">Detach the Receiver from the Producer.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:145</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_aa17cbcc9b2783998499f7a7ebb89bd57"><div class="ttname"><a href="classmq_1_1_producer.html#aa17cbcc9b2783998499f7a7ebb89bd57">mq::Producer::send</a></div><div class="ttdeci">void send(MessageType &amp;&amp;message)</div><div class="ttdoc">Send a message to any attached Receiver (rvalue reference version).</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:273</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_a711accd74700651f1dc95b961c8f3fa7"><div class="ttname"><a href="classmq_1_1_receiver.html#a711accd74700651f1dc95b961c8f3fa7">mq::Receiver::blocking</a></div><div class="ttdeci">bool blocking() noexcept</div><div class="ttdoc">Return true if the Receiver has a blocking listen method.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:140</div></div>
+<div class="ttc" id="aclassmq_1_1_receiver_html_abd2a95e6b7d927d40055fac31ab4a0a6"><div class="ttname"><a href="classmq_1_1_receiver.html#abd2a95e6b7d927d40055fac31ab4a0a6">mq::Receiver::detached</a></div><div class="ttdeci">bool detached() noexcept</div><div class="ttdoc">Return whether the Receiver is in a detached state.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:152</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html"><div class="ttname"><a href="classmq_1_1_producer.html">mq::Producer</a></div><div class="ttdoc">The producer class is used to send messages to various receivers objects.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:26</div></div>
+<div class="ttc" id="aclassmq_1_1_full_queue_exception_html"><div class="ttname"><a href="classmq_1_1_full_queue_exception.html">mq::FullQueueException</a></div><div class="ttdoc">Thrown when the message queue is full and FullQueuePolicy::THROW is specified.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:67</div></div>
+<div class="ttc" id="amessage_queue_8hpp_html_af914ef7706dfb2637713a63808dba5b3"><div class="ttname"><a href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">mq::Mode</a></div><div class="ttdeci">Mode</div><div class="ttdoc">Enum class describing if the queue is a FIFO or a LIFO.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:29</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_a551e44f172e38a48547ce4cad9341a4e"><div class="ttname"><a href="classmq_1_1_producer.html#a551e44f172e38a48547ce4cad9341a4e">mq::Producer::set_max_len</a></div><div class="ttdeci">void set_max_len(typename std::deque&lt; MessageType &gt;::size_type max_queue_size) noexcept</div><div class="ttdoc">Set the maximum number of messages the queue can accumulate.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:268</div></div>
+<div class="ttc" id="aclassmq_1_1_producer_html_a4582da5db4af15cff9b3f9f1a49d583e"><div class="ttname"><a href="classmq_1_1_producer.html#a4582da5db4af15cff9b3f9f1a49d583e">mq::Producer::attach</a></div><div class="ttdeci">void attach(Receiver&lt; MessageType &gt; &amp;receiver) noexcept</div><div class="ttdoc">Attach a Receiver.</div><div class="ttdef"><b>Definition:</b> messageQueue.hpp:297</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
