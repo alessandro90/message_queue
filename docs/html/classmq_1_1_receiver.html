@@ -92,22 +92,22 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#aed41141a3ee7b90e364bf78775706cca">set_mode</a> (<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a> const &amp;queue_mode) noexcept</td></tr>
 <tr class="memdesc:aed41141a3ee7b90e364bf78775706cca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the queue mode (FIFO or LIFO) <br /></td></tr>
 <tr class="separator:aed41141a3ee7b90e364bf78775706cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa46385db4133ce97d7d79901b14476bc"><td class="memItemLeft" align="right" valign="top"><a id="aa46385db4133ce97d7d79901b14476bc"></a>
-<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#aa46385db4133ce97d7d79901b14476bc">mode</a> () noexcept</td></tr>
-<tr class="memdesc:aa46385db4133ce97d7d79901b14476bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue mode. <br /></td></tr>
-<tr class="separator:aa46385db4133ce97d7d79901b14476bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a711accd74700651f1dc95b961c8f3fa7"><td class="memItemLeft" align="right" valign="top"><a id="a711accd74700651f1dc95b961c8f3fa7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a711accd74700651f1dc95b961c8f3fa7">blocking</a> () noexcept</td></tr>
-<tr class="memdesc:a711accd74700651f1dc95b961c8f3fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <code>true</code> if the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> has a blocking <code>listen</code> method. <br /></td></tr>
-<tr class="separator:a711accd74700651f1dc95b961c8f3fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7da6bfd46d1d32454e98960b91db3f"><td class="memItemLeft" align="right" valign="top"><a id="a4f7da6bfd46d1d32454e98960b91db3f"></a>
+<a class="el" href="message_queue_8hpp.html#af914ef7706dfb2637713a63808dba5b3">Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a4f7da6bfd46d1d32454e98960b91db3f">mode</a> () const noexcept</td></tr>
+<tr class="memdesc:a4f7da6bfd46d1d32454e98960b91db3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue mode. <br /></td></tr>
+<tr class="separator:a4f7da6bfd46d1d32454e98960b91db3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3c19df93def2a933d53c4b94d04e0fd"><td class="memItemLeft" align="right" valign="top"><a id="af3c19df93def2a933d53c4b94d04e0fd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#af3c19df93def2a933d53c4b94d04e0fd">blocking</a> () const noexcept</td></tr>
+<tr class="memdesc:af3c19df93def2a933d53c4b94d04e0fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <code>true</code> if the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> has a blocking <code>listen</code> method. <br /></td></tr>
+<tr class="separator:af3c19df93def2a933d53c4b94d04e0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc529d2df46dfb984e63f9171edafb2f"><td class="memItemLeft" align="right" valign="top"><a id="acc529d2df46dfb984e63f9171edafb2f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#acc529d2df46dfb984e63f9171edafb2f">detach</a> () noexcept</td></tr>
 <tr class="memdesc:acc529d2df46dfb984e63f9171edafb2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> from the <a class="el" href="classmq_1_1_producer.html" title="The producer class is used to send messages to various receivers objects.">Producer</a>. <br /></td></tr>
 <tr class="separator:acc529d2df46dfb984e63f9171edafb2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd2a95e6b7d927d40055fac31ab4a0a6"><td class="memItemLeft" align="right" valign="top"><a id="abd2a95e6b7d927d40055fac31ab4a0a6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#abd2a95e6b7d927d40055fac31ab4a0a6">detached</a> () noexcept</td></tr>
-<tr class="memdesc:abd2a95e6b7d927d40055fac31ab4a0a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> is in a detached state. <br /></td></tr>
-<tr class="separator:abd2a95e6b7d927d40055fac31ab4a0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7405f764c4bd7d0eec619ccc0a54bbda"><td class="memItemLeft" align="right" valign="top"><a id="a7405f764c4bd7d0eec619ccc0a54bbda"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmq_1_1_receiver.html#a7405f764c4bd7d0eec619ccc0a54bbda">detached</a> () const noexcept</td></tr>
+<tr class="memdesc:a7405f764c4bd7d0eec619ccc0a54bbda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the <a class="el" href="classmq_1_1_receiver.html" title="Abstract base class template.">Receiver</a> is in a detached state. <br /></td></tr>
+<tr class="separator:a7405f764c4bd7d0eec619ccc0a54bbda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>

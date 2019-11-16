@@ -132,12 +132,12 @@ namespace mq {
         }
 
         /** \brief Get the queue mode */
-        Mode mode() noexcept {
+        Mode mode() const noexcept {
             return queue_mode;
         }
 
         /** \brief Return \c true if the Receiver has a blocking \c listen method */
-        bool blocking() noexcept {
+        bool blocking() const noexcept {
             return is_blocking;
         }
 
@@ -149,7 +149,7 @@ namespace mq {
         }
 
         /** \brief Return whether the Receiver is in a detached state. */
-        bool detached() noexcept {
+        bool detached() const noexcept {
             return is_detached;
         }
 
@@ -210,7 +210,7 @@ namespace mq {
         }
 
         /** \brief Extract a message from the message queue. */
-        MessageType extract_message() {
+        MessageType extract_message() const {
             if (queue_mode == Mode::LIFO) {
                 return message_queue->back();
             } else {
