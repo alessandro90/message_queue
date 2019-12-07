@@ -64,19 +64,19 @@ class ListenerTaskOne {
     std::uniform_int_distribution<> dis{6, 10};
 
     void process(Action const& message) {
-        std::cout << "ListenerTaskOne received ";
+        std::cerr << "ListenerTaskOne received ";
         switch (message) {
         case Action::ACTION_1:
-            std::cout << "ACTION_1\n" << std::flush;
+            std::cerr << "ACTION_1\n";
             break;
         case Action::ACTION_2:
-            std::cout << "ACTION_2\n" << std::flush;
+            std::cerr << "ACTION_2\n";
             break;
         case Action::ACTION_3:
-            std::cout << "ACTION_3\n" << std::flush;
+            std::cerr << "ACTION_3\n";
             break;
         default:
-            std::cout << "an unhandled message.\n" << std::flush;
+            std::cerr << "an unhandled message.\n";
             break;
         }
     }
@@ -89,7 +89,7 @@ public:
             try {
                 if (receiver.listen(message)) process(message);
             } catch (mq::BaseMessageQueueException const& e) {
-                std::cout << e.what() << "\n" << std::flush;
+                std::cerr << e.what() << "\n";
             }
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(duration(dis(gen)));
@@ -102,22 +102,22 @@ class ListenerTaskTwo {
     std::uniform_int_distribution<> dis{3, 8};
 
     void process(Action const& message) {
-        std::cout << "ListenerTaskTwo received ";
+        std::cerr << "ListenerTaskTwo received ";
         switch (message) {
         case Action::ACTION_4:
-            std::cout << "ACTION_4\n" << std::flush;
+            std::cerr << "ACTION_4\n";
             break;
         case Action::ACTION_5:
-            std::cout << "ACTION_4\n" << std::flush;
+            std::cerr << "ACTION_4\n";
             break;
         case Action::ACTION_6:
-            std::cout << "ACTION_6\n" << std::flush;
+            std::cerr << "ACTION_6\n";
             break;
         case Action::ACTION_7:
-            std::cout << "ACTION_7\n" << std::flush;
+            std::cerr << "ACTION_7\n";
             break;
         default:
-            std::cout << "an unhandled message.\n" << std::flush;
+            std::cerr << "an unhandled message.\n";
             break;
         }
     }
@@ -159,7 +159,7 @@ public:
     void operator()() {
         while (true) {
             producer.send(actions[enum_dis(gen)]);
-            std::cout << "Producer task queue size: " << producer.queue_size() << "\n" << std::flush;
+            std::cerr << "Producer task queue size: " << producer.queue_size() << "\n";
             std::this_thread::sleep_for(duration(dis(gen)));
         }
     }
