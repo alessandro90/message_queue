@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <cstddef>
 #include <thread>
 #include <random>
 #include <chrono>
@@ -19,26 +20,18 @@ using seconds = std::chrono::duration<double>;
 
 class RandomElementGetter {
 private:
-    template<typename T>
-    using is_integer = typename std::enable_if_t<std::is_integral_v<T>, T>;
     std::random_device rd{};
     std::mt19937 gen{rd()};
     std::uniform_int_distribution<> dis;
 public:
-    template<typename T, is_integer<T> = 0>
-    RandomElementGetter(T min, T max): dis(min, max) {};
-    
-    template<typename T, is_integer<T> = 0>
-    RandomElementGetter(T max): RandomElementGetter(T{}, max) {}
+    RandomElementGetter(std::size_t min, std::size_t max): dis(min, max) {};
+    RandomElementGetter(std::size_t max): RandomElementGetter(0, max) {}
     
     auto get() { return dis(gen); }
 
     template<
-            typename T,
-            typename IndexType = int,
-            typename = std::void_t<decltype(
-                 std::declval<T>()[std::declval<IndexType>()]
-            )>
+        typename T,
+        typename = std::void_t<decltype(std::declval<T>()[std::declval<std::size_t>()])>
     >
     auto& get(T const& container) {
         return container[dis(gen)];
