@@ -1,14 +1,49 @@
+/*
+
+    A simple example of usage.
+    Two communicating tasks are simulated.
+
+*/
+
 #include <iostream>
 #include <thread>
 #include <random>
 #include <chrono>
 #include <functional>
 #include <array>
+#include <type_traits>
 #include "../messageQueue.hpp"
 
+using seconds = std::chrono::duration<double>;
 
-using system_clock = std::chrono::system_clock;
-using duration = std::chrono::duration<double>;
+
+class RandomElementGetter {
+private:
+    template<typename T>
+    using is_integer = typename std::enable_if_t<std::is_integral_v<T>, T>;
+    std::random_device rd{};
+    std::mt19937 gen{rd()};
+    std::uniform_int_distribution<> dis;
+public:
+    template<typename T, is_integer<T> = 0>
+    RandomElementGetter(T min, T max): dis(min, max) {};
+    
+    template<typename T, is_integer<T> = 0>
+    RandomElementGetter(T max): RandomElementGetter(T{}, max) {}
+    
+    auto get() { return dis(gen); }
+
+    template<
+            typename T,
+            typename IndexType = int,
+            typename = std::void_t<decltype(
+                 std::declval<T>()[std::declval<IndexType>()]
+            )>
+    >
+    auto& get(T const& container) {
+        return container[dis(gen)];
+    }
+};
 
 
 enum class Action {
@@ -60,8 +95,8 @@ class ListenerTwo: public mq::Receiver<Action> {
 
 
 class ListenerTaskOne {
-    std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{6, 10};
+
+    RandomElementGetter r{6, 10};
 
     void process(Action const& message) {
         std::cerr << "ListenerTaskOne received ";
@@ -92,14 +127,14 @@ public:
                 std::cerr << e.what() << "\n";
             }
             // Simulate some time-consuming task.
-            std::this_thread::sleep_for(duration(dis(gen)));
+            std::this_thread::sleep_for(seconds(r.get()));
         }
     }
 };
 
 class ListenerTaskTwo {
-    std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{3, 8};
+
+    RandomElementGetter r{3, 8};
 
     void process(Action const& message) {
         std::cerr << "ListenerTaskTwo received ";
@@ -131,7 +166,8 @@ public:
                 if (receiver.listen(message)) process(message);
             } catch (mq::BaseMessageQueueException const& e) {}
             // Simulate some time-consuming task.
-            std::this_thread::sleep_for(duration(dis(gen)));
+            std::cerr << "Detached: " << receiver.detached();
+            std::this_thread::sleep_for(seconds(r.get()));
         }
     }
 };
@@ -147,20 +183,15 @@ class ProducerTask {
         Action::ACTION_6,
         Action::ACTION_7,
     };
-    std::mt19937 gen{std::random_device{}()};
-    std::uniform_int_distribution<> dis{1, 3};
-    std::uniform_int_distribution<> enum_dis{
-        0, static_cast<int>(actions.size()) - 1
-    };
-
-
+    RandomElementGetter r{1, 3};
+    RandomElementGetter r_element{actions.size()};
 public:
     mq::Producer<Action> producer{};
     void operator()() {
         while (true) {
-            producer.send(actions[enum_dis(gen)]);
+            producer.send(r_element.get(actions));
             std::cerr << "Producer task queue size: " << producer.queue_size() << "\n";
-            std::this_thread::sleep_for(duration(dis(gen)));
+            std::this_thread::sleep_for(seconds(r.get()));
         }
     }
 };
@@ -181,5 +212,6 @@ int main() {
     listener_thread.join();
     listener_two_thread.join();
     producer_thread.join();
+
     return 0;
 }

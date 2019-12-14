@@ -100,7 +100,10 @@ namespace mq {
          * the receiver has been set.
         */
         bool listen(MessageType &message) {
-            if (is_detached) throw DetachedListenerException{};
+            if (is_detached) {
+                if (empty_queue_policy == EmptyQueuePolicy::DO_NOTHING) return false;
+                else throw DetachedListenerException{};
+            }
             try {
                 return is_blocking ? get_message_blocking(message) : get_message_non_blocking(message);
             } catch (BaseMessageQueueException const& e) {
@@ -154,9 +157,7 @@ namespace mq {
         }
 
     private:
-
         friend class Producer<MessageType>;
-
         std::deque<MessageType> *message_queue{nullptr};
         std::mutex *queue_rw{nullptr};
         Mode queue_mode{Mode::FIFO};
