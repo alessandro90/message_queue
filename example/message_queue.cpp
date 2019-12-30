@@ -24,8 +24,7 @@ private:
     std::mt19937 gen{rd()};
     std::uniform_int_distribution<> dis;
 public:
-    RandomElementGetter(std::size_t min, std::size_t max): dis(min, max) {};
-    RandomElementGetter(std::size_t max): RandomElementGetter(0, max) {}
+    RandomElementGetter(std::size_t max, std::size_t min = 0): dis(min, max) {};
     
     auto get() { return dis(gen); }
 
@@ -89,7 +88,7 @@ class ListenerTwo: public mq::Receiver<Action> {
 
 class ListenerTaskOne {
 
-    RandomElementGetter r{6, 10};
+    RandomElementGetter r{10, 6};
 
     void process(Action const& message) {
         std::cerr << "ListenerTaskOne received ";
@@ -127,7 +126,7 @@ public:
 
 class ListenerTaskTwo {
 
-    RandomElementGetter r{3, 8};
+    RandomElementGetter r{8, 3};
 
     void process(Action const& message) {
         std::cerr << "ListenerTaskTwo received ";
@@ -176,7 +175,7 @@ class ProducerTask {
         Action::ACTION_6,
         Action::ACTION_7,
     };
-    RandomElementGetter r{1, 3};
+    RandomElementGetter r{3, 1};
     RandomElementGetter r_element{actions.size()};
 public:
     mq::Producer<Action> producer{};
