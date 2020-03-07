@@ -13,6 +13,7 @@
 #include <functional>
 #include <array>
 #include <type_traits>
+#include <deque>
 #include "../messageQueue.hpp"
 
 using seconds = std::chrono::duration<double>;
@@ -39,7 +40,6 @@ public:
 
 
 enum class Action {
-    ACTION_NONE,
     ACTION_1,
     ACTION_2,
     ACTION_3,
@@ -50,7 +50,7 @@ enum class Action {
 };
 
 std::ostream& operator<<(std::ostream& os, Action const& action) {
-    os << static_cast<int>(action);
+    os << static_cast<int>(action) + 1;
     return os;
 }
 
@@ -61,63 +61,40 @@ bool message_consumable(std::array<Action, N> const &actions, Action const& mess
     return false;
 }
 
-class ListenerOne: public mq::Receiver<Action> {
-    std::array<Action, 3> actions {
-        Action::ACTION_1,
-        Action::ACTION_2,
-        Action::ACTION_3,
-    };
-    virtual bool consumed(Action const& message) const noexcept override {
-        return message_consumable(actions, message);
+
+template<int N>
+struct MessageReader {
+    MessageReader(std::array<Action, N> actions_, int id_): actions{actions_}, id{id_} {}
+    std::array<Action, N> actions;
+    int id;
+
+    void process(Action const& message) const {
+        std::cout << "ListenerTask " << id << " received ";
+        std::cout << message << '\n';
     }
-};
 
-class ListenerTwo: public mq::Receiver<Action> {
-    std::array<Action, 4> actions {
-        Action::ACTION_4,
-        Action::ACTION_5,
-        Action::ACTION_6,
-        Action::ACTION_7,
-    };
-
-    virtual bool consumed(Action const& message) const noexcept override {
+    bool operator()(Action const& message) const {
+        process(message);
         return message_consumable(actions, message);
     }
 };
 
 
-class ListenerTaskOne {
+class ListenerTask {
 
-    RandomElementGetter r{10, 6};
-
-    void process(Action const& message) {
-        std::cerr << "ListenerTaskOne received ";
-        switch (message) {
-        case Action::ACTION_1:
-            std::cerr << "ACTION_1\n";
-            break;
-        case Action::ACTION_2:
-            std::cerr << "ACTION_2\n";
-            break;
-        case Action::ACTION_3:
-            std::cerr << "ACTION_3\n";
-            break;
-        default:
-            std::cerr << "an unhandled message.\n";
-            break;
-        }
-    }
-
+    RandomElementGetter r{9, 1};
+    mq::Queue<Action>& q;
 public:
-    ListenerOne receiver{};
+    ListenerTask(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
+        auto receiver = mq::Receiver{q};
+        auto reader = MessageReader<3>{std::array{
+            Action::ACTION_1,
+            Action::ACTION_2,
+            Action::ACTION_3,
+        }, 1};
         while (true) {
-            Action message{Action::ACTION_NONE};
-            try {
-                if (receiver.listen(message)) process(message);
-            } catch (mq::BaseMessageQueueException const& e) {
-                std::cerr << e.what() << "\n";
-            }
+            receiver.listen(reader);
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(seconds(r.get()));
         }
@@ -127,43 +104,24 @@ public:
 class ListenerTaskTwo {
 
     RandomElementGetter r{8, 3};
-
-    void process(Action const& message) {
-        std::cerr << "ListenerTaskTwo received ";
-        switch (message) {
-        case Action::ACTION_4:
-            std::cerr << "ACTION_4\n";
-            break;
-        case Action::ACTION_5:
-            std::cerr << "ACTION_4\n";
-            break;
-        case Action::ACTION_6:
-            std::cerr << "ACTION_6\n";
-            break;
-        case Action::ACTION_7:
-            std::cerr << "ACTION_7\n";
-            break;
-        default:
-            std::cerr << "an unhandled message.\n";
-            break;
-        }
-    }
-
+    mq::Queue<Action>& q;
 public:
-    ListenerTwo receiver{};
+    ListenerTaskTwo(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
+        auto receiver = mq::Receiver{q};
+        auto reader = MessageReader<4>{std::array{
+            Action::ACTION_4,
+            Action::ACTION_5,
+            Action::ACTION_6,
+            Action::ACTION_7,
+        }, 2};
         while (true) {
-            Action message{Action::ACTION_NONE};
-            try{
-                if (receiver.listen(message)) process(message);
-            } catch (mq::BaseMessageQueueException const& e) {}
+            receiver.listen(reader);
             // Simulate some time-consuming task.
-            std::cerr << "Detached: " << receiver.detached();
             std::this_thread::sleep_for(seconds(r.get()));
         }
     }
 };
-
 
 class ProducerTask {
     std::array<Action, 7> actions{
@@ -177,32 +135,32 @@ class ProducerTask {
     };
     RandomElementGetter r{3, 1};
     RandomElementGetter r_element{actions.size()};
+    mq::Queue<Action>& q;
 public:
-    mq::Producer<Action> producer{};
+    ProducerTask(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
+        auto producer = mq::Producer{q};
         while (true) {
             producer.send(r_element.get(actions));
-            std::cerr << "Producer task queue size: " << producer.queue_size() << "\n";
             std::this_thread::sleep_for(seconds(r.get()));
         }
     }
 };
 
 int main() {
-    ProducerTask producer_task{};
-    ListenerTaskOne listener_task{};
-    ListenerTaskTwo listener_task_two{};
-    producer_task.producer.attach(listener_task.receiver);
-    producer_task.producer.attach(listener_task_two.receiver);
-    producer_task.producer.set_max_len(10);
-    listener_task.receiver.set_blocking(true, 30);
+
+
+    auto queue = mq::Queue{std::deque<Action>{}};
+    ProducerTask producer_task{queue};
+    ListenerTask listener_task{queue};
+    ListenerTaskTwo listener_task2{queue};
 
     // The arguments of the std:thread ctor are moved or copied by value.
     std::thread producer_thread{std::ref(producer_task)};
     std::thread listener_thread{std::ref(listener_task)};
-    std::thread listener_two_thread{std::ref(listener_task_two)};
+    std::thread listener2_thread{std::ref(listener_task2)};
     listener_thread.join();
-    listener_two_thread.join();
+    listener2_thread.join();
     producer_thread.join();
 
     return 0;
