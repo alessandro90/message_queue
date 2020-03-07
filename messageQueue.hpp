@@ -32,7 +32,7 @@ namespace mq {
     template<typename Mtype, typename QueueType, enabled<Mtype> = 0>
     class DerivedQueue: public BaseQueue<Mtype> {
     public:
-        explicit DerivedQueue(QueueType queue_): queue{queue_} {}
+        explicit DerivedQueue(QueueType&& queue_): queue{std::move(queue_)} {}
 
         virtual void pop_front() final {
             queue.pop_front();
