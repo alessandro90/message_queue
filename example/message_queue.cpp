@@ -87,7 +87,7 @@ class ListenerTask {
 public:
     ListenerTask(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
-        auto receiver = mq::Receiver{q};
+        mq::Receiver receiver{q};
         auto reader = MessageReader<3>{std::array{
             Action::ACTION_1,
             Action::ACTION_2,
@@ -108,7 +108,7 @@ class ListenerTaskTwo {
 public:
     ListenerTaskTwo(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
-        auto receiver = mq::Receiver{q};
+        mq::Receiver receiver{q};
         auto reader = MessageReader<4>{std::array{
             Action::ACTION_4,
             Action::ACTION_5,
@@ -139,7 +139,7 @@ class ProducerTask {
 public:
     ProducerTask(mq::Queue<Action> &queue): q{queue} {}
     void operator()() {
-        auto producer = mq::Producer{q};
+        mq::Producer producer{q};
         while (true) {
             producer.send(r_element.get(actions));
             std::this_thread::sleep_for(seconds(r.get()));
@@ -150,7 +150,8 @@ public:
 int main() {
 
 
-    auto queue = mq::Queue{std::deque<Action>{}};
+    // auto queue = mq::Queue{std::deque<Action>{}};
+    mq::Queue queue{std::deque<Action>{}};
     ProducerTask producer_task{queue};
     ListenerTask listener_task{queue};
     ListenerTaskTwo listener_task2{queue};

@@ -69,7 +69,7 @@ namespace mq {
         }
         virtual Mode get_mode() const noexcept { return qmode; }
         virtual ~BaseQueueManipulator() = default;
-        BaseQueueManipulator(Mode qmode_): qmode{qmode_} {}
+        explicit BaseQueueManipulator(Mode qmode_): qmode{qmode_} {}
     private:
         Mode qmode;
     };
@@ -121,6 +121,9 @@ namespace mq {
         bool push(Mtype const& msg) {
             if (full()) return false;
             queue_manipulator->push(msg, *msg_queue);
+#ifdef DEBUG
+            std::cout << "Queue size after push: " << msg_queue->size() << '\n';
+#endif
             return true;
         }
 
@@ -128,8 +131,7 @@ namespace mq {
         bool process(MessageReader&& reader) {
             std::lock_guard lck{mutex};
             if (msg_queue->empty()) return false;
-            Mtype const& msg = queue_manipulator->get(*msg_queue);
-            if (reader(msg)) {
+            if (reader(queue_manipulator->get(*msg_queue))) {
                 pop();
                 return true;
             }
@@ -170,7 +172,7 @@ namespace mq {
     template<typename Mtype, enabled<Mtype> = 0>
     class Receiver {
     public:
-        Receiver(Queue<Mtype>& q): queue{q} {}
+        explicit Receiver(Queue<Mtype>& q): queue{q} {}
         template<typename Reader,
             typename std::enable_if_t<std::is_invocable_r_v<bool, Reader, Mtype>, int> = 0>
         bool listen(Reader&& reader) {
@@ -191,7 +193,7 @@ namespace mq {
     class Producer {
 
     public:
-        Producer(Queue<Mtype>& q): queue{q} {}
+        explicit Producer(Queue<Mtype>& q): queue{q} {}
         bool send(Mtype const& msg) {
             return queue.load(msg);
         }
