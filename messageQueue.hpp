@@ -27,6 +27,7 @@ namespace mq {
         virtual Mtype& front() = 0;
         virtual std::size_t size() = 0;
         virtual bool empty() = 0;
+        virtual ~BaseQueue() = default;
     };
 
     template<typename Mtype, typename QueueType, enabled<Mtype> = 0>
@@ -71,7 +72,7 @@ namespace mq {
         virtual ~BaseQueueManipulator() = default;
         explicit BaseQueueManipulator(Mode qmode_): qmode{qmode_} {}
     private:
-        Mode qmode;
+        Mode const qmode;
     };
 
     template<typename Mtype, enabled<Mtype> = 0>

@@ -14,6 +14,7 @@
 #include <array>
 #include <type_traits>
 #include <deque>
+#include <algorithm>
 #include "../messageQueue.hpp"
 
 using seconds = std::chrono::duration<double>;
@@ -54,14 +55,6 @@ std::ostream& operator<<(std::ostream& os, Action const& action) {
     return os;
 }
 
-template<std::size_t N>
-bool message_consumable(std::array<Action, N> const &actions, Action const& message) noexcept {
-    for (Action const &a : actions)
-        if (a == message) return true;
-    return false;
-}
-
-
 template<int N>
 struct MessageReader {
     MessageReader(std::array<Action, N> actions_, int id_): actions{actions_}, id{id_} {}
@@ -75,7 +68,9 @@ struct MessageReader {
 
     bool operator()(Action const& message) const {
         process(message);
-        return message_consumable(actions, message);
+        return std::find(
+            std::begin(actions), std::end(actions), message
+        ) != std::end(actions);
     }
 };
 
