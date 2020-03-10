@@ -119,19 +119,6 @@ namespace mq {
             count_empty{max_size_, max_size_}
         {}
 
-        bool full() const noexcept { return msg_queue->size() == max_size; }
-        bool empty() const noexcept { return msg_queue->empty(); }
-        void pop() { queue_manipulator->pop(*msg_queue); }
-        
-        bool push(Mtype const& msg) {
-            if (full()) return false;
-            queue_manipulator->push(msg, *msg_queue);
-#ifdef DEBUG
-            std::cout << "Queue size after push: " << msg_queue->size() << '\n';
-#endif
-            return true;
-        }
-
         template<typename MessageReader>
         bool process(MessageReader&& reader) {
             sync::Synchronizer s{count_full, count_empty, mutex};
@@ -142,13 +129,14 @@ namespace mq {
             }
             return false;
         }
+        
         bool load(Mtype const& msg) {
             sync::Synchronizer s{count_empty, count_full, mutex};
             return push(msg);
         }
-        std::size_t size() const noexcept { return max_size; }
-        std::size_t count() const noexcept { return msg_queue->size(); }
+        
         void set_mode(Mode new_mode) noexcept {
+            std::lock_guard lck{mutex};
             switch (new_mode) {
                 case Mode::FIFO:
                     queue_manipulator.reset(new QueueManipulatorFIFO<Mtype>{});
@@ -160,8 +148,26 @@ namespace mq {
                 break;
             }
         }
-        Mode mode() const noexcept { return queue_manipulator->get_mode(); }
+        
+        Mode mode() const noexcept {
+            std::lock_guard lck{mutex};
+            return queue_manipulator->get_mode();
+        }
+    
     private:
+        bool full() const noexcept { return msg_queue->size() == max_size; }
+        bool empty() const noexcept { return msg_queue->empty(); }
+        void pop() { queue_manipulator->pop(*msg_queue); }
+        std::size_t size() const noexcept { return max_size; }
+        std::size_t count() const noexcept { return msg_queue->size(); }
+        bool push(Mtype const& msg) {
+            if (full()) return false;
+            queue_manipulator->push(msg, *msg_queue);
+#ifdef DEBUG
+            std::cout << "Queue size after push: " << msg_queue->size() << '\n';
+#endif
+            return true;
+        }
         std::unique_ptr<BaseQueueManipulator<Mtype>> queue_manipulator {
             new QueueManipulatorLIFO<Mtype>{}
         };
