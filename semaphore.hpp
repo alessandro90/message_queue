@@ -9,7 +9,6 @@ namespace sem {
     public:
         Semaphore(std::size_t max_slots_, std::size_t slots_);
         void acquire();
-
         void release();
     private:
         std::size_t const max_slots;

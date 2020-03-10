@@ -6,23 +6,26 @@ In the `example` folder there is a basic example of usage. The library is aimed 
 
 The example can be compiled (with the GNU compiler for example) with (the -std=c++17 flag is needed only if your compiler does not use the C++17 standard by default):
 
-`g++ message_queue.cpp -std=c++17 -lpthread -Wall -Wextra -Wpedantic`
+`g++ message_queue.cpp ..\semaphore.cpp ..\synchronizer.cpp -std=c++17 -lpthread -Wall -Wextra -Wpedantic -DDEBUG`
 
 This is just an exercise to use some "advanced" features of C++.
 
 Possible output:
 
 ```
-ListenerTask 1 received 5
+Queue size after push: 1
 ListenerTask 2 received 5
-ListenerTask 1 received 3
-ListenerTask 2 received 6
-ListenerTask 1 received 5
-ListenerTask 2 received 5
-ListenerTask 1 received 5
-ListenerTask 2 received 5
-ListenerTask 2 received 6
-ListenerTask 1 received 2
+Queue size after push: 1
+ListenerTask 1 received 6
+Queue size after push: 2
+ListenerTask 2 received 3
+Queue size after push: 3
 ListenerTask 1 received 1
+Queue size after push: 3
+ListenerTask 2 received 1
+ListenerTask 1 received 1
+Queue size after push: 3
 ListenerTask 2 received 5
+Queue size after push: 3
+ListenerTask 1 received 1
 ```

@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <memory>
 #include <utility>
-#include "semaphore.hpp"
+#include "synchronizer.hpp"
 
 namespace mq {
 
@@ -109,12 +109,15 @@ namespace mq {
 
     public:
         template<typename QueueType>
-        explicit Queue(QueueType&& msg_queue_) {
-            msg_queue = std::make_unique<
+        explicit Queue(QueueType&& msg_queue_, std::size_t max_size_ = 1000):
+            msg_queue{std::make_unique<
                 DerivedQueue<Mtype, std::decay_t<QueueType>>>(
                 std::move(msg_queue_)
-            );
-        }
+            )},
+            max_size{max_size_},
+            count_full{max_size_, 0},
+            count_empty{max_size_, max_size_}
+        {}
 
         bool full() const noexcept { return msg_queue->size() == max_size; }
         bool empty() const noexcept { return msg_queue->empty(); }
@@ -131,27 +134,18 @@ namespace mq {
 
         template<typename MessageReader>
         bool process(MessageReader&& reader) {
-            count_full.acquire();
-            std::unique_lock lck{mutex};
-            bool processed = false;
-            if (msg_queue->empty()) processed = false;
+            sync::Synchronizer s{count_full, count_empty, mutex};
+            if (msg_queue->empty()) return false;
             if (reader(queue_manipulator->get(*msg_queue))) {
                 pop();
-                processed = true;
+                return true;
             }
-            lck.unlock();
-            count_empty.release();
-            return processed;
+            return false;
         }
         bool load(Mtype const& msg) {
-            count_empty.acquire();
-            std::unique_lock lck{mutex};
-            bool pushed =  push(msg);
-            lck.unlock();
-            count_full.release();
-            return pushed;
+            sync::Synchronizer s{count_empty, count_full, mutex};
+            return push(msg);
         }
-        void set_size(std::size_t size) noexcept { max_size = size; }
         std::size_t size() const noexcept { return max_size; }
         std::size_t count() const noexcept { return msg_queue->size(); }
         void set_mode(Mode new_mode) noexcept {
@@ -173,11 +167,11 @@ namespace mq {
         };
         std::unique_ptr<BaseQueue<Mtype>> msg_queue;
         std::mutex mutex{};
-        std::size_t max_size{1000};
-        sem::Semaphore count_full{max_size, 0}, count_empty{max_size, max_size};
+        std::size_t const max_size;
+        sem::Semaphore count_full, count_empty;
     };
     template<typename Mtype = void, typename QueueType>
-    explicit Queue(QueueType&&) -> Queue<typename QueueType::value_type>;
+    explicit Queue(QueueType&&, std::size_t) -> Queue<typename QueueType::value_type>;
 
 
     template<typename Mtype, enabled<Mtype> = 0>

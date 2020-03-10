@@ -145,8 +145,7 @@ public:
 int main() {
 
 
-    // auto queue = mq::Queue{std::deque<Action>{}};
-    mq::Queue queue{std::deque<Action>{}};
+    mq::Queue queue{std::deque<Action>{}, 10};
     ProducerTask producer_task{queue};
     ListenerTask listener_task{queue};
     ListenerTaskTwo listener_task2{queue};
