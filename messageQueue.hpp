@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <memory>
 #include <utility>
+#include "semaphore.hpp"
 
 namespace mq {
 
@@ -130,17 +131,25 @@ namespace mq {
 
         template<typename MessageReader>
         bool process(MessageReader&& reader) {
-            std::lock_guard lck{mutex};
-            if (msg_queue->empty()) return false;
+            count_full.acquire();
+            std::unique_lock lck{mutex};
+            bool processed = false;
+            if (msg_queue->empty()) processed = false;
             if (reader(queue_manipulator->get(*msg_queue))) {
                 pop();
-                return true;
+                processed = true;
             }
-            return false;
+            lck.unlock();
+            count_empty.release();
+            return processed;
         }
         bool load(Mtype const& msg) {
-            std::lock_guard lck{mutex};
-            return push(msg);
+            count_empty.acquire();
+            std::unique_lock lck{mutex};
+            bool pushed =  push(msg);
+            lck.unlock();
+            count_full.release();
+            return pushed;
         }
         void set_size(std::size_t size) noexcept { max_size = size; }
         std::size_t size() const noexcept { return max_size; }
@@ -165,6 +174,7 @@ namespace mq {
         std::unique_ptr<BaseQueue<Mtype>> msg_queue;
         std::mutex mutex{};
         std::size_t max_size{1000};
+        sem::Semaphore count_full{max_size, 0}, count_empty{max_size, max_size};
     };
     template<typename Mtype = void, typename QueueType>
     explicit Queue(QueueType&&) -> Queue<typename QueueType::value_type>;
