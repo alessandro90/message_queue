@@ -36,25 +36,25 @@ namespace mq {
     public:
         explicit DerivedQueue(QueueType&& queue_): queue{std::move(queue_)} {}
 
-        virtual void pop_front() final {
+        void pop_front() final {
             queue.pop_front();
         }
-        virtual void pop_back() final {
+        void pop_back() final {
             queue.pop_back();
         }
-        virtual void push(Mtype const& msg) final {
+        void push(Mtype const& msg) final {
             queue.push_back(msg);
         }
-        virtual Mtype& back() final {
+        Mtype& back() final {
             return queue.back();
         }
-        virtual Mtype& front() final {
+        Mtype& front() final {
             return queue.front();
         }
-        virtual std::size_t size() final {
+        std::size_t size() final {
             return queue.size();
         }
-        virtual bool empty() final {
+        bool empty() final {
             return queue.empty();
         }
     private:
@@ -81,10 +81,10 @@ namespace mq {
     public:
         QueueManipulatorFIFO(): BaseQueueManipulator<Mtype>{Mode::FIFO} {}
 
-        virtual void pop(BaseQueue<Mtype>& messq) final {
+        void pop(BaseQueue<Mtype>& messq) final {
             messq.pop_front();
         }
-        virtual Mtype const& get(BaseQueue<Mtype>& messq) const final {
+        Mtype const& get(BaseQueue<Mtype>& messq) const final {
             return messq.front();
         }
     };
@@ -95,10 +95,10 @@ namespace mq {
     public:
         QueueManipulatorLIFO(): BaseQueueManipulator<Mtype>{Mode::LIFO} {}
  
-        virtual void pop(BaseQueue<Mtype>& messq) final {
+        void pop(BaseQueue<Mtype>& messq) final {
             messq.pop_back();
         }
-        virtual Mtype const& get(BaseQueue<Mtype>& messq) const final {
+        Mtype const& get(BaseQueue<Mtype>& messq) const final {
             return messq.back();
         }
     };
@@ -112,14 +112,16 @@ namespace mq {
         explicit Queue(QueueType&& msg_queue_, std::size_t max_size_ = 1000):
             msg_queue{std::make_unique<
                 DerivedQueue<Mtype, std::decay_t<QueueType>>>(
-                std::move(msg_queue_)
-            )},
+                    std::move(msg_queue_)
+                )
+            },
             max_size{max_size_},
             count_full{max_size_, 0},
             count_empty{max_size_, max_size_}
         {}
 
-        template<typename MessageReader>
+        template<typename MessageReader,
+            typename std::enable_if_t<std::is_invocable_r_v<bool, MessageReader, Mtype>, int> = 0>
         bool process(MessageReader&& reader) {
             sync::Synchronizer s{count_full, count_empty, mutex};
             if (msg_queue->empty()) return false;
@@ -176,8 +178,12 @@ namespace mq {
         std::size_t const max_size;
         sem::Semaphore count_full, count_empty;
     };
+
+    template<typename T>
+    using remove_cv_ref_t = std::remove_cv_t<std::remove_reference_t<T>>;
+
     template<typename Mtype = void, typename QueueType>
-    explicit Queue(QueueType&&, std::size_t) -> Queue<typename QueueType::value_type>;
+    explicit Queue(QueueType&&, std::size_t) -> Queue<typename remove_cv_ref_t<QueueType>::value_type>;
 
 
     template<typename Mtype, enabled<Mtype> = 0>

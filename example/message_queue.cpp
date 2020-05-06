@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <cstdio>
 #include <cstddef>
 #include <thread>
 #include <random>
@@ -143,7 +144,6 @@ public:
 };
 
 int main() {
-
 
     mq::Queue queue{std::deque<Action>{}, 10};
     ProducerTask producer_task{queue};
