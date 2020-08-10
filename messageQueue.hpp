@@ -14,6 +14,10 @@
 
 #include "synchronizer.hpp"
 
+// TODO:
+// 1. Blocking receiver with condition_variable
+// 2. Use only message references and pointers? (could use hierarchies of messages in one queue)
+//    queue of unique_ptr(s)
 namespace mq {
 
     enum class Mode {

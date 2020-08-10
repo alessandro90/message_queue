@@ -1,4 +1,4 @@
-# C++17 Template Message Queue
+# C++20 Template Message Queue
 
 This is a simple `C++20 ` header file which implements a message queue. All the classes are templates, so that a message can be basically any copyable type.
 
