@@ -60,7 +60,7 @@ std::ostream& operator<<(std::ostream& os, Action const& action)
 
 class ListenerTask {
 
-    RandomElementGetter r { 9, 1 };
+    RandomElementGetter r { 5, 1 };
     mq::Queue<Action>& q;
 
 public:
@@ -97,7 +97,7 @@ public:
 
 class ListenerTaskTwo {
 
-    RandomElementGetter r { 8, 3 };
+    RandomElementGetter r { 6, 3 };
     mq::Queue<Action>& q;
 
 public:
@@ -165,7 +165,7 @@ public:
 int main()
 {
 
-    mq::Queue queue { std::deque<Action> {}, 10 };
+    mq::Queue queue { std::deque<Action> {}, 100 };
     ProducerTask producer_task { queue };
     ListenerTask listener_task { queue };
     ListenerTaskTwo listener_task2 { queue };

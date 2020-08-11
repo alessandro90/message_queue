@@ -59,8 +59,8 @@ public:
     virtual void push(Mtype const& msg) = 0;
     virtual Mtype& back() = 0;
     virtual Mtype& front() = 0;
-    virtual std::size_t size() = 0;
-    virtual bool empty() = 0;
+    virtual std::size_t size() const = 0;
+    virtual bool empty() const = 0;
     virtual ~BaseQueue() = default;
 };
 
@@ -92,11 +92,11 @@ public:
     {
         return queue.front();
     }
-    std::size_t size() final
+    std::size_t size() const final
     {
         return queue.size();
     }
-    bool empty() final
+    bool empty() const final
     {
         return queue.empty();
     }
