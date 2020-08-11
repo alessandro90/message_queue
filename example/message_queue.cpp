@@ -22,15 +22,16 @@ using seconds = std::chrono::duration<double>;
 
 class RandomElementGetter {
 private:
-    std::random_device rd{};
-    std::mt19937 gen{ rd() };
+    std::random_device rd {};
+    std::mt19937 gen { rd() };
     std::uniform_int_distribution<> dis;
 
 public:
     explicit RandomElementGetter(std::size_t max, std::size_t min = 0)
         : dis(min, max) {};
 
-    auto get() {
+    auto get()
+    {
         return dis(gen);
     }
 
@@ -59,18 +60,18 @@ std::ostream& operator<<(std::ostream& os, Action const& action)
 
 class ListenerTask {
 
-    RandomElementGetter r{ 9, 1 };
+    RandomElementGetter r { 9, 1 };
     mq::Queue<Action>& q;
 
 public:
     explicit ListenerTask(mq::Queue<Action>& queue)
-        : q{ queue }
+        : q { queue }
     {
     }
     void operator()()
     {
-        mq::Receiver receiver{ q };
-        std::array supported{
+        mq::Receiver receiver { q };
+        std::array supported {
             Action::ACTION_1,
             Action::ACTION_2,
             Action::ACTION_3,
@@ -78,15 +79,15 @@ public:
         while (true) {
             auto m = receiver.dequeue_if([&supported](Action const& a) {
                 return std::find(std::begin(supported),
-                    std::end(supported), a)
+                           std::end(supported), a)
                     != std::end(supported);
-                });
+            });
             if (m) {
                 std::cout << "ListenerTask "
-                    << 1
-                    << " received "
-                    << m.value()
-                    << '\n';
+                          << 1
+                          << " received "
+                          << m.value()
+                          << '\n';
             }
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(seconds(r.get()));
@@ -96,18 +97,18 @@ public:
 
 class ListenerTaskTwo {
 
-    RandomElementGetter r{ 8, 3 };
+    RandomElementGetter r { 8, 3 };
     mq::Queue<Action>& q;
 
 public:
     explicit ListenerTaskTwo(mq::Queue<Action>& queue)
-        : q{ queue }
+        : q { queue }
     {
     }
     void operator()()
     {
-        mq::Receiver receiver{ q };
-        std::array supported{
+        mq::Receiver receiver { q };
+        std::array supported {
             Action::ACTION_4,
             Action::ACTION_5,
             Action::ACTION_6,
@@ -116,15 +117,15 @@ public:
         while (true) {
             auto m = receiver.dequeue_if([&supported](Action const& a) {
                 return std::find(std::begin(supported),
-                    std::end(supported), a)
+                           std::end(supported), a)
                     != std::end(supported);
-                });
+            });
             if (m) {
                 std::cout << "ListenerTask "
-                    << 2
-                    << " received "
-                    << m.value()
-                    << '\n';
+                          << 2
+                          << " received "
+                          << m.value()
+                          << '\n';
             }
             // Simulate some time-consuming task.
             std::this_thread::sleep_for(seconds(r.get()));
@@ -133,7 +134,7 @@ public:
 };
 
 class ProducerTask {
-    std::array<Action, 7> actions{
+    std::array<Action, 7> actions {
         Action::ACTION_1,
         Action::ACTION_2,
         Action::ACTION_3,
@@ -142,18 +143,18 @@ class ProducerTask {
         Action::ACTION_6,
         Action::ACTION_7,
     };
-    RandomElementGetter r{ 3, 1 };
-    RandomElementGetter r_element{ actions.size() };
+    RandomElementGetter r { 3, 1 };
+    RandomElementGetter r_element { actions.size() };
     mq::Queue<Action>& q;
 
 public:
     explicit ProducerTask(mq::Queue<Action>& queue)
-        : q{ queue }
+        : q { queue }
     {
     }
     void operator()()
     {
-        mq::Producer producer{ q };
+        mq::Producer producer { q };
         while (true) {
             producer.enqueue(r_element.get(actions));
             std::this_thread::sleep_for(seconds(r.get()));
@@ -164,12 +165,12 @@ public:
 int main()
 {
 
-    mq::Queue queue{ std::deque<Action> {}, 10 };
-    ProducerTask producer_task{ queue };
-    ListenerTask listener_task{ queue };
-    ListenerTaskTwo listener_task2{ queue };
+    mq::Queue queue { std::deque<Action> {}, 10 };
+    ProducerTask producer_task { queue };
+    ListenerTask listener_task { queue };
+    ListenerTaskTwo listener_task2 { queue };
 
-    std::jthread producer_thread{ std::ref(producer_task) };
-    std::jthread listener_thread{ std::ref(listener_task) };
-    std::jthread listener2_thread{ std::ref(listener_task2) };
+    std::jthread producer_thread { std::ref(producer_task) };
+    std::jthread listener_thread { std::ref(listener_task) };
+    std::jthread listener2_thread { std::ref(listener_task2) };
 }

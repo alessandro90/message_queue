@@ -1,4 +1,5 @@
 #include "synchronizer.hpp"
+
 namespace sync {
 Synchronizer::Synchronizer(sem::Semaphore& sem_a_,
     sem::Semaphore& sem_b_,
