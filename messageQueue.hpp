@@ -167,7 +167,7 @@ public:
     {
         return messq.back();
     }
-    Mtype move(BaseQueue<Mtype>& messq) const final
+    Mtype move(BaseQueue<Mtype>& messq) final
     {
         return std::move(messq.back());
     }
