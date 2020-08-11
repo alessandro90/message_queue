@@ -38,7 +38,7 @@ namespace mq {
         { q.empty() } -> std::convertible_to<bool>;
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class BaseQueue {
     public:
         virtual void pop_front() = 0;
@@ -51,7 +51,7 @@ namespace mq {
         virtual ~BaseQueue() = default;
     };
 
-    template <std::copy_constructible Mtype, ValidQueue QueueType>
+    template <std::movable Mtype, ValidQueue QueueType>
     class DerivedQueue : public BaseQueue<Mtype> {
     public:
         explicit DerivedQueue(QueueType&& queue_)
@@ -85,11 +85,12 @@ namespace mq {
         QueueType queue;
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class BaseQueueManipulator {
     public:
         virtual void pop(BaseQueue<Mtype>& messq) = 0;
-        virtual Mtype const& get(BaseQueue<Mtype>& messq) const = 0;
+        virtual Mtype const& peek(BaseQueue<Mtype>& messq) const = 0;
+        virtual Mtype move(BaseQueue<Mtype>& messq) = 0;
         virtual void push(Mtype const& msg, BaseQueue<Mtype>& messq)
         {
             messq.push(msg);
@@ -107,7 +108,7 @@ namespace mq {
         Mode const qmode;
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class QueueManipulatorFIFO : public BaseQueueManipulator<Mtype> {
     public:
         QueueManipulatorFIFO()
@@ -118,13 +119,17 @@ namespace mq {
         void pop(BaseQueue<Mtype>& messq) final {
             messq.pop_front();
         }
-        Mtype const& get(BaseQueue<Mtype>& messq) const final
+        Mtype const& peek(BaseQueue<Mtype>& messq) const final
         {
             return messq.front();
         }
+        Mtype move(BaseQueue<Mtype>& messq) final
+        {
+            return std::move(messq.front());
+        }
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class QueueManipulatorLIFO : public BaseQueueManipulator<Mtype> {
     public:
         QueueManipulatorLIFO()
@@ -135,17 +140,21 @@ namespace mq {
         void pop(BaseQueue<Mtype>& messq) final {
             messq.pop_back();
         }
-        Mtype const& get(BaseQueue<Mtype>& messq) const final {
+        Mtype const& peek(BaseQueue<Mtype>& messq) const final {
             return messq.back();
+        }
+        Mtype move(BaseQueue<Mtype>& messq) const final
+        {
+            return std::move(messq.back());
         }
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class Queue {
     public:
         template <ValidQueue QueueType>
         explicit Queue(QueueType&& msg_queue_, std::size_t max_size_ = 1000)
-            : msg_queue{ std::make_unique<DerivedQueue<Mtype, std::decay_t<QueueType>>>(
+            : msg_queue{ std::make_unique<DerivedQueue<Mtype, std::remove_cvref_t<QueueType>>>(
                 std::move(msg_queue_)) }
             , max_size{ max_size_ }
             , count_full{ max_size_, 0 }
@@ -158,20 +167,19 @@ namespace mq {
             sync::Synchronizer s{ count_full, count_empty, mutex };
             if (msg_queue->empty())
                 return {};
-            if (Mtype const& m = queue_manipulator->get(*msg_queue);
-                std::invoke(pred, m))
+            if (std::invoke(pred, queue_manipulator->peek(*msg_queue)))
             {
-                std::optional<Mtype> r{ m };
+                auto msg = queue_manipulator->move(*msg_queue);
                 pop();
-                return r;
+                return { msg };
             }
             return {};
         }
 
-        bool enqueue(Mtype const& msg)
+        bool enqueue(Mtype &&msg)
         {
             sync::Synchronizer s{ count_empty, count_full, mutex };
-            return push(msg);
+            return push(std::move(msg));
         }
 
         void set_mode(Mode new_mode)
@@ -183,8 +191,6 @@ namespace mq {
                 break;
             case Mode::LIFO:
                 queue_manipulator.reset(new QueueManipulatorLIFO<Mtype>{});
-                break;
-            default:
                 break;
             }
         }
@@ -209,11 +215,11 @@ namespace mq {
             return max_size;
         }
         // std::size_t count() const noexcept { return msg_queue->size(); }
-        bool push(Mtype const& msg)
+        bool push(Mtype &&msg)
         {
             if (full())
                 return false;
-            queue_manipulator->push(msg, *msg_queue);
+            queue_manipulator->push(std::move(msg), *msg_queue);
             #ifdef DEBUG
             std::cout << "Queue size after push: " << msg_queue->size() << '\n';
             #endif
@@ -232,7 +238,7 @@ namespace mq {
     explicit Queue(QueueType&&, std::size_t)
         ->Queue<typename std::remove_cvref_t<QueueType>::value_type>;
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class Receiver {
     public:
         explicit Receiver(Queue<Mtype>& q)
@@ -248,28 +254,28 @@ namespace mq {
     private:
         Queue<Mtype>& queue;
     };
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     Receiver(Queue<Mtype>&)->Receiver<Mtype>;
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class BlockingReceiver : public Receiver<Mtype> {
     };
 
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     class Producer {
     public:
         explicit Producer(Queue<Mtype>& q)
             : queue{ q }
         {
         }
-        bool enqueue(Mtype const& msg) {
-            return queue.enqueue(msg);
+        bool enqueue(Mtype &&msg) {
+            return queue.enqueue(std::move(msg));
         }
 
     private:
         Queue<Mtype>& queue;
     };
-    template <std::copy_constructible Mtype>
+    template <std::movable Mtype>
     Producer(Queue<Mtype>&)->Producer<Mtype>;
 } // namespace mq
 

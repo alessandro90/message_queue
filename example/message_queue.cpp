@@ -35,7 +35,7 @@ public:
     }
 
     template <typename T>
-    auto& get(T const& container) requires requires { std::declval<T>()[std::declval<std::size_t>()]; }
+    auto get(T const& container) requires requires { std::declval<T>()[std::declval<std::size_t>()]; }
     {
         return container[dis(gen)];
     }
