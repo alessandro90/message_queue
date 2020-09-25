@@ -38,7 +38,7 @@ concept ValidQueue = requires(Q q)
     }
     ->std::same_as<typename Q::value_type&>;
     {
-        q.back()
+        q.front()
     }
     ->std::same_as<typename Q::value_type&>;
     {
