@@ -4,9 +4,19 @@ This is a simple `C++20 ` header file which implements a message queue. All the 
 
 In the `example` folder there is a basic example of usage. The library is aimed at allowing the comunication between tasks in different threads.
 
-The example can be compiled (with the GNU compiler for example) with (the -std=c++2a flag:
+## Build the example with cmake
 
-`g++ message_queue.cpp ../semaphore.cpp ../synchronizer.cpp -std=c++2a -lpthread -Wall -Wextra -Wpedantic -DDEBUG`
+```shell
+mkdir build && cd build
+cmake ..
+make
+```
+
+And run the executable (from the build directory)
+
+```shell
+./example/example
+```
 
 This is just an exercise to use some "advanced" features of C++.
 
