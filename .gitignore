@@ -1,3 +1,5 @@
 .vscode/
 *.exe
 a.out
+.cache/
+build/

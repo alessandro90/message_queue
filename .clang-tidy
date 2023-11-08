@@ -1,0 +1,31 @@
+---
+Checks: >
+  *,
+  -fuchsia-*,
+  -google-*,
+  -zircon-*,
+  -abseil-*,
+  -modernize-use-trailing-return-type,
+  -llvm*,
+  -misc-no-recursion,
+  -altera-struct-pack-align,
+  -hicpp-named-parameter,
+  -readability-named-parameter,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -misc-non-private-member-variables-in-classes,
+  -readability-else-after-return,
+  -altera-unroll-loops,
+  -readability-identifier-length,
+  -altera-id-dependent-backward-branch,
+  -bugprone-exception-escape,
+  -hicpp-uppercase-literal-suffix,
+  -readability-uppercase-literal-suffix,
+  -bugprone-easily-swappable-parameters
+CheckOptions:
+  - key: hicpp-special-member-functions.AllowSoleDefaultDtor
+    value: true
+  - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: true
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+FormatStyle: none
