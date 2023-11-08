@@ -76,10 +76,7 @@ public:
         };
         while (true) {
             auto m = receiver.dequeue_if([&supported](Action const &a) {
-                return std::find(std::begin(supported),
-                                 std::end(supported),
-                                 a)
-                       != std::end(supported);
+                return std::ranges::find(supported, a) != std::ranges::end(supported);
             });
             if (m) {
                 std::cout << "ListenerTask "
@@ -112,10 +109,7 @@ public:
         };
         while (true) {
             auto m = receiver.dequeue_if([&supported](Action const &a) {
-                return std::find(std::begin(supported),
-                                 std::end(supported),
-                                 a)
-                       != std::end(supported);
+                return std::ranges::find(supported, a) != std::ranges::end(supported);
             });
             if (m) {
                 std::cout << "ListenerTask "
