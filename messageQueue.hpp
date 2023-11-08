@@ -47,8 +47,8 @@ public:
     virtual void push(Mtype const &msg) = 0;
     virtual Mtype &back() = 0;
     virtual Mtype &front() = 0;
-    virtual std::size_t size() const = 0;
-    virtual bool empty() const = 0;
+    [[nodiscard]] virtual std::size_t size() const = 0;
+    [[nodiscard]] virtual bool empty() const = 0;
     virtual ~BaseQueue() = default;
 };
 
@@ -63,8 +63,8 @@ public:
     void push(Mtype const &msg) final { queue.push_back(msg); }
     Mtype &back() final { return queue.back(); }
     Mtype &front() final { return queue.front(); }
-    std::size_t size() const final { return queue.size(); }
-    bool empty() const final { return queue.empty(); }
+    [[nodiscard]] std::size_t size() const final { return queue.size(); }
+    [[nodiscard]] bool empty() const final { return queue.empty(); }
 
 private:
     QueueType queue;
@@ -74,18 +74,18 @@ template <std::movable Mtype>
 class BaseQueueManipulator {
 public:
     virtual void pop(BaseQueue<Mtype> &messq) = 0;
-    virtual Mtype const &peek(BaseQueue<Mtype> &messq) const = 0;
-    virtual Mtype move(BaseQueue<Mtype> &messq) = 0;
+    [[nodiscard]] virtual Mtype const &peek(BaseQueue<Mtype> &messq) const = 0;
+    [[nodiscard]] virtual Mtype move(BaseQueue<Mtype> &messq) = 0;
     virtual void push(Mtype const &msg, BaseQueue<Mtype> &messq) {
         messq.push(msg);
     }
-    virtual Mode get_mode() const noexcept { return qmode; }
+    [[nodiscard]] virtual Mode get_mode() const noexcept { return qmode; }
     virtual ~BaseQueueManipulator() = default;
     explicit BaseQueueManipulator(Mode qmode_)
         : qmode{qmode_} {}
 
 private:
-    Mode const qmode;
+    Mode qmode;
 };
 
 template <std::movable Mtype>
@@ -116,12 +116,15 @@ public:
 
 template <std::movable Mtype>
 class Queue {
+    inline static constexpr std::size_t s_default_size{1000};
+
 public:
     template <ValidQueue QueueType>
-    explicit Queue(QueueType &&msg_queue_, std::size_t max_size_ = 1000)
+    explicit Queue(QueueType &&msg_queue_, std::size_t max_size_ = s_default_size)  // NOLINT
+        requires std::is_rvalue_reference_v<decltype(msg_queue_)>
         : msg_queue{std::make_unique<
             DerivedQueue<Mtype, std::remove_cvref_t<QueueType>>>(
-            std::move(msg_queue_))}
+            std::move(msg_queue_))}  // NOLINT
         , max_size{max_size_}
         , count_full{max_size_, 0}
         , count_empty{max_size_, max_size_} {}
@@ -129,8 +132,7 @@ public:
     std::optional<Mtype>
     dequeue_if(std::predicate<Mtype const &> auto const &pred) {
         synch::Synchronizer s{count_full, count_empty, mutex};
-        if (msg_queue->empty())
-            return {};
+        if (msg_queue->empty()) { return {}; }
         if (std::invoke(pred, queue_manipulator->peek(*msg_queue))) {
             auto msg = queue_manipulator->move(*msg_queue);
             pop();
@@ -156,20 +158,19 @@ public:
         }
     }
 
-    Mode mode() const {
+    [[nodiscard]] Mode mode() const {
         std::lock_guard lck{mutex};
         return queue_manipulator->get_mode();
     }
 
 private:
-    bool full() const { return msg_queue->size() == max_size; }
-    bool empty() const { return msg_queue->empty(); }
+    [[nodiscard]] bool full() const { return msg_queue->size() == max_size; }
+    [[nodiscard]] bool empty() const { return msg_queue->empty(); }
     void pop() { queue_manipulator->pop(*msg_queue); }
-    std::size_t size() const noexcept { return max_size; }
+    [[nodiscard]] std::size_t size() const noexcept { return max_size; }
     // std::size_t count() const noexcept { return msg_queue->size(); }
     bool push(Mtype &&msg) {
-        if (full())
-            return false;
+        if (full()) { return false; }
         queue_manipulator->push(std::move(msg), *msg_queue);
 #ifdef DEBUG
         std::cout << "Queue size after push: " << msg_queue->size() << '\n';
@@ -180,7 +181,7 @@ private:
         new QueueManipulatorLIFO<Mtype>{}};
     std::unique_ptr<BaseQueue<Mtype>> msg_queue;
     std::mutex mutex{};
-    std::size_t const max_size;
+    std::size_t max_size;
     sem::Semaphore count_full, count_empty;
 };
 
@@ -199,7 +200,7 @@ public:
     }
 
 private:
-    Queue<Mtype> &queue;
+    Queue<Mtype> &queue;  // NOLINT
 };
 template <std::movable Mtype>
 Receiver(Queue<Mtype> &) -> Receiver<Mtype>;
@@ -215,7 +216,7 @@ public:
     bool enqueue(Mtype &&msg) { return queue.enqueue(std::move(msg)); }
 
 private:
-    Queue<Mtype> &queue;
+    Queue<Mtype> &queue;  // NOLINT
 };
 template <std::movable Mtype>
 Producer(Queue<Mtype> &) -> Producer<Mtype>;
