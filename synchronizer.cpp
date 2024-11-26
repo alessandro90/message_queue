@@ -6,13 +6,12 @@ Synchronizer::Synchronizer(sem::Semaphore &sem_a_,
                            std::mutex &m_)
     : sem_a{sem_a_}
     , sem_b{sem_b_}
-    , lck{m_, std::defer_lock} {
-    sem_a.acquire();
-    lck.lock();
+    , mtx{m_} {
+    sem_a.acquire(m_);
 }
 
 Synchronizer::~Synchronizer() {
-    lck.unlock();
+    mtx.unlock();
     sem_b.release();
 }
 }  // namespace synch

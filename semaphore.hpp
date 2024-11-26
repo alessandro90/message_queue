@@ -8,7 +8,7 @@ namespace sem {
 class Semaphore {
 public:
     Semaphore(std::size_t max_slots_, std::size_t slots_);
-    void acquire();
+    void acquire(std::mutex &);
     void release();
 
 private:

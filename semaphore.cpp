@@ -5,10 +5,11 @@ Semaphore::Semaphore(std::size_t max_slots_, std::size_t slots_ = 0)
     : max_slots{max_slots_}
     , slots{slots_} {
 }
-void Semaphore::acquire() {
+void Semaphore::acquire(std::mutex &ext_mutex) {
     std::unique_lock lk{m};
     cv.wait(lk, [&] { return slots > 0; });
     --slots;
+    ext_mutex.lock();
 }
 
 void Semaphore::release() {

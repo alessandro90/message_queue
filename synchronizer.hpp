@@ -17,7 +17,7 @@ public:
 private:
     // NOLINTNEXTLINE
     sem::Semaphore &sem_a, &sem_b;
-    std::unique_lock<std::mutex> lck;
+    std::mutex &mtx;
 };
 }  // namespace synch
 #endif
